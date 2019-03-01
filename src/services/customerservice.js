@@ -11,5 +11,8 @@ export default {
   },
   Login (user) {
     return Api().post('/customers/login', user)
+  },
+  Logout () {
+    return Api().post('/customers/logout')
   }
 }

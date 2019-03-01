@@ -1,64 +1,59 @@
-<meta name="viewpoint" content="width=device-width, initial-scale=1"/>
+
 <template>
-  <div class="hero">
-    <h3 class="vue-title"><i class="fa fa-info" style="padding: 3px"></i>{{messagetitle}}</h3>
-    <v-divider class="mt-5"></v-divider>
-    <v-card-actions>
-      <v-btn outline color="indigo" flat @click="logout()">Logout</v-btn>
-    </v-card-actions>
+  <div id="logout" data-app>
+    <v-layout row justify-center>
+      <v-dialog v-model="dialog" persistent max-width="290">
+        <v-card>
+          <v-card-title class="headline">Log Out</v-card-title>
+          <v-card-text>Are you totally sure to log out?</v-card-text>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn color="green darken-1" flat="flat" @click="cancelDialog">Cancel</v-btn>
+            <v-btn color="green darken-1" flat="flat" @click="LogOut">Log Out</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+    </v-layout>
   </div>
 </template>
 
 <script>
-// import CustomerService from '@/services/CustomerService'
+import AdminService from '@/services/adminservice'
+import Vue from 'vue'
+import VueCookies from 'vue-cookies'
+
+Vue.use(VueCookies)
 
 export default {
-  name: 'Logout',
+  name: 'LogOut',
+  props: ['dialog'],
   data () {
     return {
-      messagetitle: ' Logout '
+      openStatus: this.dialog
     }
   },
-  /* created () {
-      this.fetchCustomer()
-    }, */
   methods: {
-    Logout: function () {
-      this.$swal({
-        title: 'Are you totally sure:',
-        text: 'You can\'t Undo this action',
-        type: 'warning',
-        showCancelButton: true,
-        confirmButtonText: 'OK Logout',
-        cancelButtonText: 'Cancel',
-        showCloseButton: true
-      }).then((result) => {
-        console.log('SWAL Result : ' + result.value)
-        if (result.value === true) {
-          // CustomerService.Logout()
-          // .then(response => {
-          // JSON responses are automatically parsed.
-          // this.message = response.data
-          console.log(this.message)
-          // this.loadBookings()
-          this.$swal('Logged out', 'Successfully Logout ')
-          this.$router.push('Home')
-        } else {
-          console.log(' SWAL Else Result: ' + result.value)
-          this.$swal('Cancelled', 'Logout cancelled!', 'info')
-        }
-      })
+    cancelDialog () {
+      this.openStatus = false
+      this.$emit('update-dialog', this.openStatus)
+    },
+    LogOut () {
+      AdminService.Logout()
+        .then(response => {
+          this.$cookies.remove('user')
+          this.openStatus = false
+          this.$emit('update-dialog', this.openStatus)
+          this.$router.go(0)
+          this.$router.push('/')
+        })
     }
   }
 }
-
 </script>
 
 <style scoped>
-  .vue-title {
-    margin-top: 30px;
-    text-align: center;
-    font-size: 45pt;
-    margin-bottom: 10px;
+  #signout{
+    min-width: 500px;
+    margin-top: 100px;
   }
 </style>

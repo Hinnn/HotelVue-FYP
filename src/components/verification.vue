@@ -5,8 +5,18 @@
         <v-card ref="form" id="verificationCard">
           <v-card-title class="display-1 pl-5 pt-5">Email Verification</v-card-title>
           <v-card-text>
-              <v-text-field ref="email" :rules="[() => !!email || 'This field is required', emailCheck]" v-model="email" label="Email" placeholder="e.g.xxx@xx.com" required></v-text-field>
-            <v-text-field ref="code" v-model="code" :rules="[() => !!code || 'This field is required']" label="Email Verification Code" placeholder="Email verification code" required></v-text-field>
+              <v-text-field ref="email"
+                            :rules="[() => !!email || 'This field is required', emailCheck]"
+                            v-model="email"
+                            label="email"
+                            placeholder="e.g.xxx@xx.com" required>
+              </v-text-field>
+            <v-text-field ref="code"
+                          v-model="code"
+                          :rules="[() => !!code || 'This field is required']"
+                          label="Email Verification Code"
+                          placeholder="Code in your email" required>
+            </v-text-field>
             <v-radio-group v-model="role" :mandatory="false" row>
               <v-radio label="Customer" value="customer"></v-radio>
               <v-radio label="Administrator" value="admin"></v-radio>
@@ -17,10 +27,10 @@
             <v-btn color="primary" flat @click="submit">Verify</v-btn>
           </v-card-actions>
           <v-card-text>
-            <p class="typo__p red--text" v-if="submitStatus === 'ERROR'">Please input a correct code</p>
+            <p class="typo__p red--text" v-if="submitStatus === 'ERROR'">Wrong code!</p>
             <p class="typo__p red--text" v-if="isVerified === 'NO'">{{message}}</p>
             <p class="typo__p green--text" v-if="isVerified === 'YES'">{{message}}</p>
-            <p class="typo__p orange--text" v-if="submitStatus === 'PENDING' && isRegister === 'YES'"> Please waiting...</p>
+            <p class="typo__p orange--text" v-if="submitStatus === 'PENDING' && isVerified === 'YES'"> Please waiting...</p>
           </v-card-text>
         </v-card>
       </v-flex>
@@ -29,7 +39,7 @@
 </template>
 
 <script>
-import CustomerService from '@/services/CustomerService'
+import CustomerService from '@/services/customerservice'
 import AdminService from '@/services/adminservice'
 
 import Vue from 'vue'
@@ -43,9 +53,9 @@ export default {
     errorMessages: '',
     code: null,
     role: 'customer',
-    formHasErrors: false,
+    formError: false,
     submitStatus: null,
-    isRegister: null,
+    isVerified: null,
     message: ''
   }),
 
@@ -70,14 +80,15 @@ export default {
       this.errorMessages = checkEmail.test(this.email) ? '' : 'Wrong email format!'
       return this.errorMessages
     },
+
     submit () {
-      this.formHasErrors = false
+      this.formError = false
 
       Object.keys(this.form).forEach(f => {
-        if (!this.form[f]) this.formHasErrors = true
+        if (!this.form[f]) this.formError = true
       })
 
-      if (this.formHasErrors === false) {
+      if (this.formError === false) {
         let user = {'email': this.email, 'code': this.code}
         if (this.role === 'customer') {
           CustomerService.Verification(user)
@@ -92,24 +103,27 @@ export default {
                 this.isVerified = 'YES'
                 this.message = 'Congratulations! Your account has been verified!'
                 this.submitStatus = 'PENDING'
-              // this.$router.push('/')
+                // this.$router.push('/Login')
               }
               console.log(response.data)
             })
         } else if (this.role === 'admin') {
-          AdminService.SignUp(user).then(response => {
-            if (response.data.data === null) {
-              this.isRegister = 'NO'
-              this.message = ''
-              this.message = response.data.message
-            } else {
-              this.isRegister = 'YES'
-              this.message = ''
-              this.message = response.data.message
-              this.submitStatus = 'PENDING'
-              // this.$router.push('/')
-            }
-          })
+          AdminService.Verification(user)
+            .then(response => {
+              if (!user) {
+                this.message = 'Wrong code!'
+                this.isVerified = 'NO'
+              } else if ((Date.now() - user.register_date) > (1000 * 60 * 10)) {
+                this.message = 'Timeout! Please sign up again!'
+                this.isVerified = 'NO'
+              } else {
+                this.isVerified = 'YES'
+                this.message = 'Congratulations! Your account has been verified!'
+                this.submitStatus = 'PENDING'
+                // this.$router.push('/Login')
+              }
+              console.log(response.data)
+            })
         }
       }
     }

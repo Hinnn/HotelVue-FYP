@@ -3,7 +3,7 @@
     <v-layout justify-center>
       <v-flex xs12 sm10 md8 lg6>
         <v-card ref="form" id="signupCard" v-model="valid" lazy-validation>
-          <v-card-title class="display-1 pl-5 pt-5">Sign Up</v-card-title>
+          <v-card-title class="display-1 pl-5 pt-5">SUGNUP</v-card-title>
           <v-card-text>
             <v-text-field
               ref="name" v-model="name" :rules="[() => !!name || 'This field is required']"
@@ -38,7 +38,7 @@
                           :rules="[() => !!password2 || 'This field is required',
                           () => !!password2 && password2.length >= 8 || 'Password should be more than 8 characters!',
                           () => !!password2 && password2.length <= 15 || 'Password should be less than 15 characters!',
-                          () => !$v.password2.sameAsPassword || 'Please input the same password', password2Check]"
+                           password2Check]"
                           :type="show2 ? 'text' : 'password'"
                           :counter="15"
                           label="Confirm Password"
@@ -80,12 +80,11 @@
 </template>
 
 <script>
-import CustomerService from '@/services/CustomerService'
+import CustomerService from '@/services/customerservice'
 import AdminService from '@/services/adminservice'
 
 import Vue from 'vue'
 import Vuelidate from 'vuelidate'
-// import {sameAs} from 'vuelidate/lib/validators'
 Vue.use(Vuelidate)
 
 export default {
