@@ -1,137 +1,213 @@
-<meta name="viewpoint" content="width=device-width, initial-scale=1"/>
 <template>
-  <div id="app1" class="hero">
-    <h3 class="vue-title"><i class="fa fa-money" style="padding: 3px"></i>{{messagetitle}}</h3>
-    <div class="container mt-3 mt-sm-5">
-      <div class="row justify-content-center">
-        <div class="col-md-6">
-          <form action="#" @submit.prevent="submit" class="sign-up-htm">
-            <div class="group">
-              <label :class="{ invalid: $v.customerID.$dirty && $v.customerID.$invalid }" for="sign-up-customerID" class="label">customerID</label>
-              <input @input="$v.customerID.$touch()" :class="{ invalid: $v.customerID.$dirty && $v.customerID.$invalid }" id="sign-up-customerID" type="text" class="input" placeholder="Required" v-model.trim="customerID">
-              <div class="error" v-if="!$v.customerID.minLength">Minimum customerID length is 8</div>
-            </div>
-            <div class="group">
-              <label :class="{ invalid: $v.name.$dirty && $v.name.$invalid }" for="sign-up-name" class="label">Name</label>
-              <input @input="$v.name.$touch()" :class="{ invalid: $v.name.$dirty && $v.name.$invalid }" id="sign-up-name" type="text" class="input" placeholder="Required" v-model.trim="name">
-            </div>
-            <div class="group">
-              <label :class="{ invalid: $v.email.$dirty && $v.email.$invalid }" for="email" class="label">Email</label>
-              <input @input="$v.email.$touch()" :class="{ invalid: $v.email.$dirty && $v.email.$invalid }" id="email" type="text" class="input" placeholder="Required" v-model.trim="email">
-              <div class="error" v-if="!$v.email.email">Email format is wrong</div>
-            </div>
-            <div class="group">
-              <label :class="{ invalid: $v.phoneNumber.$dirty && $v.phoneNumber.$invalid }" for="phoneNumber" class="label">phoneNumber</label>
-              <input @input="$v.phoneNumber.$touch()" :class="{ invalid: $v.phoneNumber.$dirty && $v.phoneNumber.$invalid }" id="phoneNumber" type="text" class="input" placeholder="Optional" v-model.trim="phoneNumber">
-            </div>
-            <div class="group">
-              <label :class="{ invalid: $v.password.$dirty && $v.password.$invalid }" for="sign-up-pass1" class="label">Password</label>
-              <input @input="$v.password.$touch()" :class="{ invalid: $v.password.$dirty && $v.password.$invalid }" id="sign-up-pass1" type="password" class="input" data-type="password" placeholder="Required" v-model.trim="password">
-            </div>
-            <div class="error" v-if="!$v.password.minLength">Minimum Password length is 6</div>
-            <div class="form-group" :class="{ 'form-group--error': $v.password.$error }">
-            </div>
-            <div class="group">
-              <label :class="{ invalid: $v.password2.$dirty && $v.password2.$invalid }" for="sign-up-pass2" class="label">Confirm Password</label>
-              <input @input="$v.password2.$touch()" :class="{ invalid: $v.password2.$dirty && $v.password2.$invalid }" id="sign-up-pass2" type="password" class="input" data-type="password" placeholder="Required" v-model.trim="password2">
-              <div class="error" v-if="!$v.password2.minLength">Minimum Password length is 6</div>
-              <div class="error" v-if="!$v.password2.sameAsPassword">Different password</div>
-            </div>
-            <p>
-              <button class="btn btn-primary btn1" type="submit" :disabled="submitStatus === 'PENDING'">SignUp</button>
-            </p>
-            <p class="typo__p" v-if="submitStatus === 'OK'" >SignUp Successfully!</p>
-            <p class="typo__p" v-if="submitStatus === 'ERROR'">Something wrong</p>
-            <p class="typo__p" v-if="submitStatus === 'PENDING'">signing up...</p>
-            <div class="hr"></div>
-            <div class="foot-lnk">
-              <a href="#/Login" for="tab-1">Already Member?</a>
-            </div>
-          </form>
-        </div>
-      </div>
-    </div>
+  <div id="signup">
+    <v-layout justify-center>
+      <v-flex xs12 sm10 md8 lg6>
+        <v-card ref="form" id="signupCard" v-model="valid" lazy-validation>
+          <v-card-title class="display-1 pl-5 pt-5">Sign Up</v-card-title>
+          <v-card-text>
+            <v-text-field
+              ref="name" v-model="name" :rules="[() => !!name || 'This field is required']"
+              label="Name"
+              placeholder="Required"
+              required>
+            </v-text-field>
+            <v-text-field ref="email"
+                          v-model="email"
+                          :rules="[() => !!email || 'This field is required', emailCheck]"
+                          label="Email"
+                          placeholder="e.g.xxx@xx.com"
+                          required>
+
+            </v-text-field>
+            <v-text-field ref="password"
+                          v-model="password"
+                          :append-icon="show1 ? 'visibility_off' : 'visibility'"
+                          :rules="[() => !!password || 'This field is required',() => !!password && password.length >= 8 || 'Password should be more than 8 characters!',
+                                   () => !!password && password.length <= 15 || 'Password should be less than 15 characters!',passwordCheck]"
+                          :type="show1 ? 'text' : 'password'"
+                          :counter="15"
+                          label="Password"
+                          placeholder="8-15 characters contain number,special character, lowercase and capital Letters"
+                          @click:append="show1 = !show1"
+                          required>
+
+            </v-text-field>
+            <v-text-field ref="password2"
+                          v-model="password2"
+                          :append-icon="show2 ? 'visibility_off' : 'visibility'"
+                          :rules="[() => !!password2 || 'This field is required',
+                          () => !!password2 && password2.length >= 8 || 'Password should be more than 8 characters!',
+                          () => !!password2 && password2.length <= 15 || 'Password should be less than 15 characters!',
+                          () => !$v.password2.sameAsPassword || 'Please input the same password', password2Check]"
+                          :type="show2 ? 'text' : 'password'"
+                          :counter="15"
+                          label="Confirm Password"
+                          placeholder="Same as password"
+                          @click:append="show2 = !show2"
+                          required>
+            </v-text-field>
+            <v-checkbox
+              v-model="checkbox"
+              :error-messages="checkboxErrors"
+              label="Do you agree?"
+              required
+              @change="$v.checkbox.$touch()"
+              @blur="$v.checkbox.$touch()"
+            ></v-checkbox>
+            <v-radio-group v-model="role" :mandatory="false" row>
+              <v-radio label="Customer" value="customer"></v-radio>
+              <v-radio label="Administrator" value="admin"></v-radio>
+            </v-radio-group>
+          </v-card-text>
+          <v-divider class="mt-5"></v-divider>
+          <v-card-actions>
+            <v-btn outline color="indigo" flat @click="submit">Submit</v-btn>
+            <v-btn outline color="indigo" flat @click="clear">Cancel</v-btn>
+          </v-card-actions>
+          <div class="foot-lnk">
+            <a href="#/Login" for="tab-1">Already Member?</a>
+          </div>
+          <v-card-text>
+            <p class="typo__p red--text" v-if="submitStatus === 'ERROR'">Please input all the fields correctly.</p>
+            <p class="typo__p red--text" v-if="isRegister === 'NO'">{{message}}</p>
+            <p class="typo__p green--text" v-if="isRegister === 'YES'">{{message}}</p>
+            <p class="typo__p orange--text" v-if="submitStatus === 'PENDING' && isRegister === 'YES'"> Please waiting...</p>
+          </v-card-text>
+        </v-card>
+      </v-flex>
+    </v-layout>
   </div>
 </template>
 
 <script>
 import CustomerService from '@/services/CustomerService'
+import AdminService from '@/services/adminservice'
+
 import Vue from 'vue'
-import VueForm from 'vueform'
 import Vuelidate from 'vuelidate'
-import {required, email, minLength, sameAs} from 'vuelidate/lib/validators'
-
-Vue.use(VueForm, {
-  inputClasses: {
-    valid: 'form-control-success',
-    invalid: 'form-control-danger'
-  }
-})
-
+// import {sameAs} from 'vuelidate/lib/validators'
 Vue.use(Vuelidate)
 
 export default {
   name: 'SignUp',
-  data () {
-    return {
-      customerID: '',
-      name: '',
-      email: '',
-      phoneNumber: '',
-      password: '',
-      password2: '',
-      hint: false,
-      messagetitle: ' SignUp ',
-      submitStatus: null,
-      info: null
-    }
-  },
+  data: () => ({
+    roles: ['Customer', 'Administrator'],
+    errorMessages: '',
+    name: null,
+    email: null,
+    password: null,
+    password2: null,
+    show1: false,
+    show2: false,
+    checkbox: false,
+    role: 'customer',
+    formHasErrors: false,
+    submitStatus: null,
+    isRegister: null,
+    message: ''
+  }),
   validations: {
-    customerID: {
-      required,
-      minLength: minLength(8)
-    },
-    name: {
-      required
-    },
-    email: {
-      required,
-      email
-    },
-    phoneNumber: {
-      minLength: minLength(9)
-    },
-    password: {
-      required,
-      minLength: minLength(6)
-    },
-    password2: {
-      required,
-      minLength: minLength(6),
-      sameAsPassword: sameAs('password')
+
+    // password: {
+    // },
+    // password2: {
+    //   sameAsPassword: sameAs('password')
+    // },
+    checkbox: {
+      checked (val) {
+        return val
+      }
     }
   },
+
+  computed: {
+    form () {
+      return {
+        name: this.name,
+        email: this.email,
+        password: this.password,
+        password2: this.password2,
+        role: this.role
+      }
+    },
+    checkboxErrors () {
+      const errors = []
+      if (!this.$v.checkbox.$dirty) return errors
+      !this.$v.checkbox.checked && errors.push('You must agree to continue!')
+      return errors
+    }
+  },
+
+  watch: {
+    name () {
+      this.errorMessages = ''
+    }
+  },
+
   methods: {
+    emailCheck () {
+      let checkEmail = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(\.[a-zA-Z0-9_-])+/
+      this.errorMessages = checkEmail.test(this.email) ? '' : 'Wrong email format!'
+      return this.errorMessages
+    },
+    passwordCheck () {
+      let checkPassword = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W])[a-zA-Z\d\W?$]{8,16}/
+      this.errorMessages = checkPassword.test(this.password) ? '' : 'Password must has number,special character, lowercase and capital Letters!'
+
+      return this.errorMessages
+    },
+    password2Check () {
+      let checkPassword2 = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W])[a-zA-Z\d\W?$]{8,16}/
+      this.errorMessages = checkPassword2.test(this.password2) ? '' : 'At least a number, lowercase letter, capital letter and special character'
+      return this.errorMessages
+    },
+    clear () {
+      this.$v.$reset()
+      this.name = ''
+      this.email = ''
+      this.password = ''
+      this.password2 = ''
+      this.checkbox = false
+    },
     submit () {
-      this.$v.$touch()
-      if (this.$v.$invalid) {
-        this.submitStatus = 'ERROR'
-      } else {
-        this.submitStatus = 'PENDING'
-        let params = {'customerID': this.customerID, 'name': this.name, 'email': this.email, 'phoneNumber': this.phoneNumber, 'password': this.password, 'password2': this.password2}
-        CustomerService.SignUp(params)
-          .then(response => {
-            this.info = response
-            if (this.info.data.data === null) {
-              this.submitStatus = 'ERROR'
+      this.formHasErrors = false
+
+      Object.keys(this.form).forEach(f => {
+        if (!this.form[f]) this.formHasErrors = true
+      })
+
+      if (this.formHasErrors === false) {
+        let user = {'email': this.email, 'password': this.password, 'password2': this.password2, 'name': this.name}
+        if (this.role === 'customer') {
+          CustomerService.SignUp(user).then(response => {
+            if (response.data.data === null) {
+              this.message = ''
+              this.message = response.data.message
+              this.isRegister = 'NO'
             } else {
-              this.submitStatus = 'OK'
-              sessionStorage.setItem('token', this.info.headers.token)
-              setTimeout(() => {
-                this.$router.push('/customerLogin')
-              }, 1000)
+              this.isRegister = 'YES'
+              this.message = ''
+              this.message = response.data.message
+              this.submitStatus = 'PENDING'
+              this.$router.push('/verification')
+            }
+            console.log(response.data)
+          })
+        } else if (this.role === 'admin') {
+          AdminService.SignUp(user).then(response => {
+            if (response.data.data === null) {
+              this.isRegister = 'NO'
+              this.message = ''
+              this.message = response.data.message
+            } else {
+              this.isRegister = 'YES'
+              this.message = ''
+              this.message = response.data.message
+              this.submitStatus = 'PENDING'
+              this.$router.push('/verification')
             }
           })
+        }
       }
     }
   }
@@ -139,61 +215,8 @@ export default {
 </script>
 
 <style scoped>
-  #app1 {
-    width: 95%;
-    margin: 0 auto;
-  }
-  .required-field > label::after {
-    content: '*';
-    color: red;
-    margin-left: 0.25rem;
-  }
-  .donate-form .form-control-label.text-left{
-    text-align: left;
-  }
-
-  label {
-    display: inline-block;
-    width: 540px;
-    text-align: left;
-    font-size: x-large;
-  }
-  .typo__p {
-    width: 540px;
-    font-size: x-large;
-  }
-  .btn1 {
-    width: 300px;
-    font-size: x-large;
-  }
-  p {
-    margin-top: 20px;
-  }
-
-  input {
-    border: 1px solid silver;
-    border-radius: 4px;
-    background: white;
-    padding: 5px 10px;
-    width: 540px;
-  }
-
-  .dirty {
-    border-color: #5A5;
-    background: #EFE;
-  }
-
-  .dirty:focus {
-    outline-color: #8E8;
-  }
-
-  .error {
-    border-color: red;
-    background: #157ffb;
-    color: whitesmoke;
-  }
-
-  .error:focus {
-    outline-color: #ffa519;
+  #signupCard {
+    min-width: 500px;
+    /*margin-top: 50px;*/
   }
 </style>

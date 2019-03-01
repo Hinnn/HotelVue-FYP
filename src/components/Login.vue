@@ -1,47 +1,50 @@
 <template>
-  <div id="app1" class="hero">
-    <h3 class="vue-title"><i class="fa fa-money" style="padding: 3px"></i>{{messagetitle}}</h3>
-    <div class="container mt-3 mt-sm-5">
-      <div class="row justify-content-center">
-        <div class="col-md-6">
-          <form @submit.prevent="submit">
-            <div class="form-group" :class="{ 'form-group--error': $v.email.$error }">
-              <label class="form-label" name="email">Email</label>
-              <input class="form__input" type="email" placeholder="Enter Email" v-model.trim="email"/>
-            </div>
-            <div class="error" v-if="!$v.email.required">Email is Required</div>
-            <div class="error" v-if="!$v.email.email">Email format is wrong</div>
-            <div class="form-group" :class="{ 'form-group--error': $v.password.$error }">
-              <label class="form-label" name="password">Password</label>
-              <input class="form__input" type="password" placeholder="Enter Password" v-model.trim="password"/>
-            </div>
-            <div class="error" v-if="!$v.password.required">Password is Required</div>
-            <p>
-              <button class="btn btn-primary btn1" type="submit" :disabled="submitStatus === 'PENDING'">Login</button>
-            </p>
-            <p class="typo__p" v-if="submitStatus === 'OK'" >Login Successfully!</p>
-            <p class="typo__p" v-if="submitStatus === 'ERROR'">Wrong Email or Password!</p>
-            <p class="typo__p" v-if="submitStatus === 'PENDING'">Login...</p>
-          </form>
-        </div>
-      </div>
-    </div>
-  </div>
+<div id="login">
+  <v-layout justify-center>
+    <v-flex xs12 sm10 md8 lg6>
+      <v-card ref="form" id="loginCard">
+        <v-card-title class="display-1 pl-5 pt-5">Login</v-card-title>
+        <v-card-text>
+          <v-text-field v-model="email" :error-message="emailCheck" label="Email" placeholder="e.g.xxx@xx.com" required
+                        @input="$v.email.$touch()" @blur="$v.email.$touch()"></v-text-field>
+          <v-text-field ref="password"
+                        v-model="password"
+                        :append-icon="show ? 'visibility_off' : 'visibility'"
+                        :error-message="passwordCheck"
+                        :counter="15"
+                        label="Password"
+                        :type="show ? 'text' : 'password'"
+                        @click:append="show = !show"
+                        required
+                        @input="$v.password.$touch()" @blur="$v.password.$touch()">
+          </v-text-field>
+          <v-radio-group v-model="role" :mandatory="false" row>
+            <v-radio label="Customer" value="customer"></v-radio>
+            <v-radio label="Administrator" value="admin"></v-radio>
+          </v-radio-group>
+        </v-card-text>
+        <v-divider class="mt-5"></v-divider>
+        <v-card-actions>
+          <v-btn outline color="indigo" flat @click="submit">Submit</v-btn>
+        </v-card-actions>
+        <v-card-text>
+          <p class="typo__p red--text" v-if="submitStatus === 'ERROR'">Please input your email and password correctly.</p>
+          <p class="typo__p red--text" v-if="isLogged === 'NO'">{{message}}</p>
+          <p class="typo__p green--text" v-if="isLogged === 'YES'">{{message}}</p>
+          <p class="typo__p orange--text" v-if="submitStatus === 'PENDING' && isLogged === 'YES'"> Please waiting...</p>
+        </v-card-text>
+      </v-card>
+    </v-flex>
+  </v-layout>
+</div>
 </template>
-
 <script>
 import CustomerService from '@/services/CustomerService'
+import AdminService from '@/services/adminservice'
 import Vue from 'vue'
-import VueForm from 'vueform'
+// import VueForm from 'vueform'
 import Vuelidate from 'vuelidate'
-import { required, email } from 'vuelidate/lib/validators'
-
-Vue.use(VueForm, {
-  inputClasses: {
-    valid: 'form-control-success',
-    invalid: 'form-control-danger'
-  }
-})
+import { required, minLength, email, maxLength } from 'vuelidate/lib/validators'
 
 Vue.use(Vuelidate)
 
@@ -51,7 +54,9 @@ export default {
     return {
       email: '',
       password: '',
+      show: false,
       hint: false,
+      isLogged: null,
       messagetitle: ' Login ',
       submitStatus: null,
       info: null
@@ -63,31 +68,78 @@ export default {
       email
     },
     password: {
-      required
+      required,
+      minLength: minLength(8),
+      maxLength: maxLength(15)
     }
   },
-  methods: {
-    submit () {
-      this.$v.$touch()
-      if (this.$v.$invalid) {
-        this.submitStatus = 'ERROR'
-      } else {
-        this.submitStatus = 'PENDING'
-        let params = {'email': this.email, 'password': this.password}
-        CustomerService.Login(params)
-          .then(response => {
-            this.info = response
-            // console.log(this.info.headers)
-            if (this.info.data.data === null) {
-              this.submitStatus = 'ERROR'
-            } else {
-              this.submitStatus = 'OK'
-              sessionStorage.setItem('token', this.info.headers.token)
-              setTimeout(() => {
-                this.$router.push('/Home')
-              }, 1000)
-            }
-          })
+  computed: {
+    emailCheck () {
+      const errors = []
+      if (!this.$v.email.$dirty) return errors
+      !this.$v.email.email && errors.push('Wrong email format!')
+      !this.$v.email.required && errors.push('Email is required!')
+      return errors
+    },
+    passwordCheck () {
+      const errors = []
+      if (!this.$v.password.$dirty) return errors
+      !this.$v.password.minLength && errors.push('Password should more than 8 characters!')
+      !this.$v.password.maxLength && errors.push('Password should less than 15 characters!')
+      !this.$v.password.required && errors.push('Please input your password!')
+      return errors
+    },
+    methods: {
+      submit () {
+        this.$v.$touch()
+        if (this.$v.$invalid) {
+          this.submitStatus = 'ERROR'
+        } else {
+          let user = {'email': this.email, 'password': this.password}
+          if (this.role === 'customer') {
+            CustomerService.Login(user)
+              .then(response => {
+                this.info = response
+                // console.log(this.info.headers)
+                if (this.info.data.data === null) {
+                  this.message = ''
+                  this.message = response.data.message
+                  this.isLogged = 'NO'
+                } else {
+                  this.isLogged = 'YES'
+                  this.message = ''
+                  this.message = response.data.message
+                  this.submitStatus = 'PENDING'
+                  sessionStorage.setItem('token', this.info.headers.token)
+                  setTimeout(() => {
+                    this.$router.push('/Home')
+                  }, 1000)
+                  this.$router.push({
+                    path: '/'
+                    // query: {id: response.data.data._id, name: response.data.data.name, role: this.role}
+                  })
+                }
+              })
+          } else if (this.role === 'admin') {
+            AdminService.Login(user)
+              .then(response => {
+                this.info = response
+                // console.log(this.info.headers)
+                if (this.info.data.data === null) {
+                  this.message = ''
+                  this.message = response.data.message
+                  this.isLogged = 'NO'
+                } else {
+                  this.isLogged = 'YES'
+                  this.message = ''
+                  this.message = response.data.message
+                  this.submitStatus = 'PENDING'
+
+                  this.$router.push('/Home')
+                }
+              })
+          }
+        }
       }
     }
   }

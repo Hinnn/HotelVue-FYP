@@ -2,11 +2,14 @@ import Api from '@/services/api'
 
 export default {
 
-  SignUp (customer) {
-    return Api().post('/customers/signUp', customer,
+  SignUp (user) {
+    return Api().post('/customers/signUp', user,
       { headers: {'Content-type': 'application/json'} })
   },
-  Login (params) {
-    return Api().post('/customers/login', params)
+  Verification (user) {
+    return Api().post('customers/verification', user)
+  },
+  Login (user) {
+    return Api().post('/customers/login', user)
   }
 }

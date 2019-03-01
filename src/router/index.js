@@ -1,9 +1,12 @@
 import Vue from 'vue'
+import 'vuetify/dist/vuetify.min.css'
 import Router from 'vue-router'
 import Home from '@/components/Home'
 import SignUp from '@/components/SignUp'
 import Login from '@/components/Login'
 import Logout from '@/components/Logout'
+import Verification from '@/components/verification'
+
 Vue.use(Router)
 
 export default new Router({
@@ -27,6 +30,11 @@ export default new Router({
       path: '/Logout',
       name: 'Logout',
       component: Logout
+    },
+    {
+      path: '/verification',
+      name: 'Email verification',
+      component: Verification
     }
   ]
 })

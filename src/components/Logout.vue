@@ -2,9 +2,10 @@
 <template>
   <div class="hero">
     <h3 class="vue-title"><i class="fa fa-info" style="padding: 3px"></i>{{messagetitle}}</h3>
-    <p>
-      <button class="btn btn-primary btn1" @click="Logout()">Logout</button>
-    </p>
+    <v-divider class="mt-5"></v-divider>
+    <v-card-actions>
+      <v-btn outline color="indigo" flat @click="logout()">Logout</v-btn>
+    </v-card-actions>
   </div>
 </template>
 
