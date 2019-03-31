@@ -1,5 +1,4 @@
-// The Vue build version to load with the `import` command
-// (runtime-only or standalone) has been set in webpack.base.conf with an alias.
+
 import Vue from 'vue'
 import Vuetify from 'vuetify'
 import App from './App'
@@ -8,15 +7,18 @@ import BootstrapVue from 'bootstrap-vue'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 import 'vuetify/dist/vuetify.min.css'
-
 import VueTables from 'vue-tables-2'
 import VueMq from 'vue-mq'
 import VueForm from 'vueform'
 import Vuelidate from 'vuelidate'
 import VueSweetalert2 from 'vue-sweetalert2'
 import * as VueGoogleMaps from 'vue2-google-maps'
+Vue.config.productionTip = false
 
-Vue.use(Vuetify)
+Vue.use(Vuetify, {
+  iconfont: 'mdi' // 'md' || 'mdi' || 'fa' || 'fa4'
+})
+// Vue.use(Vuetify)
 Vue.use(BootstrapVue)
 Vue.use(VueSweetalert2)
 Vue.use(VueTables.ClientTable, {compileTemplates: true, filterByColumn: true})

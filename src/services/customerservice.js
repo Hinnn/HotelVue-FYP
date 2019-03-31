@@ -14,5 +14,8 @@ export default {
   },
   Logout () {
     return Api().post('/customers/logout')
+  },
+  EditInfo (customer, email) {
+    return Api().put(`/customers/${email}`, customer)
   }
 }

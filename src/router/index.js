@@ -6,6 +6,7 @@ import SignUp from '@/components/SignUp'
 import Login from '@/components/Login'
 import Logout from '@/components/Logout'
 import Verification from '@/components/verification'
+import EditInfo from '@/components/EditInfo'
 
 Vue.use(Router)
 
@@ -35,6 +36,11 @@ export default new Router({
       path: '/verification',
       name: 'Email verification',
       component: Verification
+    },
+    {
+      path: '/EditInfo',
+      name: 'Edit Information',
+      component: EditInfo
     }
   ]
 })

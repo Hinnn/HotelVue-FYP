@@ -8,13 +8,13 @@
               <v-text-field ref="email"
                             :rules="[() => !!email || 'This field is required', emailCheck]"
                             v-model="email"
-                            label="email"
+                            label="Email"
                             placeholder="e.g.xxx@xx.com" required>
               </v-text-field>
             <v-text-field ref="code"
                           v-model="code"
                           :rules="[() => !!code || 'This field is required']"
-                          label="Email Verification Code"
+                          label="Code"
                           placeholder="Code in your email" required>
             </v-text-field>
             <v-radio-group v-model="role" :mandatory="false" row>

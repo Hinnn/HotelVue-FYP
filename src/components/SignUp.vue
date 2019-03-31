@@ -2,8 +2,8 @@
   <div id="signup">
     <v-layout justify-center>
       <v-flex xs12 sm10 md8 lg6>
-        <v-card ref="form" id="signupCard" v-model="valid" lazy-validation>
-          <v-card-title class="display-1 pl-5 pt-5">SUGNUP</v-card-title>
+        <v-card ref="form" id="signupCard">
+          <v-card-title class="display-1 pl-5 pt-5">SIGN UP</v-card-title>
           <v-card-text>
             <v-text-field
               ref="name" v-model="name" :rules="[() => !!name || 'This field is required']"
@@ -46,14 +46,6 @@
                           @click:append="show2 = !show2"
                           required>
             </v-text-field>
-            <v-checkbox
-              v-model="checkbox"
-              :error-messages="checkboxErrors"
-              label="Do you agree?"
-              required
-              @change="$v.checkbox.$touch()"
-              @blur="$v.checkbox.$touch()"
-            ></v-checkbox>
             <v-radio-group v-model="role" :mandatory="false" row>
               <v-radio label="Customer" value="customer"></v-radio>
               <v-radio label="Administrator" value="admin"></v-radio>
@@ -82,9 +74,9 @@
 <script>
 import CustomerService from '@/services/customerservice'
 import AdminService from '@/services/adminservice'
-
 import Vue from 'vue'
 import Vuelidate from 'vuelidate'
+
 Vue.use(Vuelidate)
 
 export default {
@@ -100,25 +92,23 @@ export default {
     show2: false,
     checkbox: false,
     role: 'customer',
-    formHasErrors: false,
+    formErrors: false,
     submitStatus: null,
     isRegister: null,
     message: ''
   }),
-  validations: {
-
-    // password: {
-    // },
-    // password2: {
-    //   sameAsPassword: sameAs('password')
-    // },
-    checkbox: {
-      checked (val) {
-        return val
-      }
-    }
-  },
-
+  // validations: {
+  //   // password: {
+  //   // },
+  //   // password2: {
+  //   //   sameAsPassword: sameAs('password')
+  //   // },
+  //   checkbox: {
+  //     checked (val) {
+  //       return val
+  //     }
+  //   }
+  // },
   computed: {
     form () {
       return {
@@ -128,21 +118,19 @@ export default {
         password2: this.password2,
         role: this.role
       }
-    },
-    checkboxErrors () {
-      const errors = []
-      if (!this.$v.checkbox.$dirty) return errors
-      !this.$v.checkbox.checked && errors.push('You must agree to continue!')
-      return errors
     }
+    // checkboxErrors () {
+    //   const errors = []
+    //   if (!this.$v.checkbox.$dirty) return errors
+    //   !this.$v.checkbox.checked && errors.push('You must agree to continue!')
+    //   return errors
+    // }
   },
-
   watch: {
     name () {
       this.errorMessages = ''
     }
   },
-
   methods: {
     emailCheck () {
       let checkEmail = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(\.[a-zA-Z0-9_-])+/
@@ -152,7 +140,6 @@ export default {
     passwordCheck () {
       let checkPassword = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W])[a-zA-Z\d\W?$]{8,16}/
       this.errorMessages = checkPassword.test(this.password) ? '' : 'Password must has number,special character, lowercase and capital Letters!'
-
       return this.errorMessages
     },
     password2Check () {
@@ -166,16 +153,14 @@ export default {
       this.email = ''
       this.password = ''
       this.password2 = ''
-      this.checkbox = false
+      // this.checkbox = false
     },
     submit () {
-      this.formHasErrors = false
-
+      this.formErrors = false
       Object.keys(this.form).forEach(f => {
-        if (!this.form[f]) this.formHasErrors = true
+        if (!this.form[f]) this.formErrors = true
       })
-
-      if (this.formHasErrors === false) {
+      if (this.formErrors === false) {
         let user = {'email': this.email, 'password': this.password, 'password2': this.password2, 'name': this.name}
         if (this.role === 'customer') {
           CustomerService.SignUp(user).then(response => {
@@ -216,6 +201,5 @@ export default {
 <style scoped>
   #signupCard {
     min-width: 500px;
-    /*margin-top: 50px;*/
   }
 </style>
