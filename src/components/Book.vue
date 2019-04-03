@@ -95,7 +95,7 @@
 </template>
 
 <script>
-import BookingService from '@/services/bookingservice'
+import BookingService from '@/services/bookingservices'
 import Vue from 'vue'
 import Vuelidate from 'vuelidate'
 Vue.use(Vuelidate)

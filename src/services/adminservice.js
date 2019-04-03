@@ -14,5 +14,8 @@ export default {
   },
   Logout () {
     return Api().post('/admin/logout')
+  },
+  fetchAdmin (admin) {
+    return Api().get(`/admin/{email}`, admin)
   }
 }

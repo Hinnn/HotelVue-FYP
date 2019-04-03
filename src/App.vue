@@ -1,21 +1,18 @@
 <template>
-  <!--<div id="app">-->
+  <div id="app">
     <v-app>
     <b-navbar toggleable="md">
       <b-navbar-toggle target="nav_collapse"></b-navbar-toggle>
       <!--<img src="./assets/007.jpg"  width = "50" height = "47" class="img-circle" style="padding: 5px">-->
       <!--<template slot=activator>-->
-        <v-icon color="primary" dark v-on="on">home</v-icon>
+        <v-icon color="primary" dark >home</v-icon>
       <!--</template>-->
       <b-navbar-brand to="/">YourHotel</b-navbar-brand>
       <b-collapse is-nav id="nav_collapse">
         <b-navbar-nav>
-          <b-nav-item to="/#"><i class="fa fa-home" style="padding: 5px"> HOME</i></b-nav-item>
-          <b-nav-item to="/room"><i class="fa fa-money" style="padding: 5px"> ROOM</i></b-nav-item>
-          <b-nav-item to="/bookings"><i class="fa fa-list" style="padding: 5px"> MANAGE</i></b-nav-item>
-          <b-nav-item to="/book"><i class="fa fa-money" style="padding: 5px"> BOOK</i></b-nav-item>
-          <b-nav-item to="/EditInfo"><i class="fa fa-money" style="padding: 5px"> EDIT INFO</i></b-nav-item>
-          <b-nav-item to="/GoogleMap"><i class="fa fa-money" style="padding: 5px"> Map</i></b-nav-item>
+          <b-nav-item to="/"><i class="fa fa-home" style="padding: 5px"> HOME</i></b-nav-item>
+          <b-nav-item to="/customerHome"><i class="fa fa-money" style="padding: 5px"> Customerhome</i></b-nav-item>
+          <b-nav-item to="/adminHome"><i class="fa fa-money" style="padding: 5px"> Admin</i></b-nav-item>
         </b-navbar-nav>
         <b-navbar-nav class="ml-auto">
           <b-nav-item to="/SignUp"><i class="fa fa-info" style="padding: 5px"> SIGN UP </i></b-nav-item>
@@ -27,8 +24,9 @@
     </b-navbar>
     <router-view/>
     </v-app>
-  <!--</div>-->
+  </div>
 </template>
+
 <script>
 export default {
   name: 'App',
@@ -46,7 +44,6 @@ export default {
   }
 }
 </script>
-
 <style>
   #app {
     font-family: 'Avenir', Helvetica, Arial, sans-serif;
@@ -55,7 +52,7 @@ export default {
     text-align: center;
     color: #2c3e50;
     padding-top: 20px;
-    background: url("/static/images/007.JPG") repeat center top;
+    background: url("/static/images/back01.JPG") repeat center top;
   }
   .VueTables_sortable{
     cursor: pointer;

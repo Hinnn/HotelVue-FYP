@@ -11,14 +11,21 @@
               placeholder="Required"
               required>
             </v-text-field>
-            <v-text-field ref="email"
-                          v-model="email"
-                          :rules="[() => !!email || 'This field is required', emailCheck]"
-                          label="Email"
-                          placeholder="e.g.xxx@xx.com"
-                          required>
+            <!--<v-text-field ref="email"-->
+                          <!--v-model="email"-->
+                          <!--:rules="[() => !!email || 'This field is required', emailCheck]"-->
+                          <!--label="Email"-->
+                          <!--placeholder="e.g.xxx@xx.com"-->
+                          <!--required>-->
 
-            </v-text-field>
+            <!--</v-text-field>-->
+            <v-text-field
+              v-model="email"
+              :rules="emailRules"
+              label="Email"
+            placeholder="e.g.xxx@xx.com"
+              required
+            ></v-text-field>
             <v-text-field ref="password"
                           v-model="password"
                           :append-icon="show1 ? 'visibility_off' : 'visibility'"
@@ -95,7 +102,11 @@ export default {
     formErrors: false,
     submitStatus: null,
     isRegister: null,
-    message: ''
+    message: '',
+    emailRules: [
+      v => !!v || 'E-mail is required',
+      v => /.+@.+/.test(v) || 'E-mail must be valid'
+    ]
   }),
   // validations: {
   //   // password: {

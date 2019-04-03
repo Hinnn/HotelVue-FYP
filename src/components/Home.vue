@@ -1,14 +1,8 @@
 <template>
   <div id="home">
-    <articles>
       <banner />
-    </articles>
-
-    <about />
 
     <subscribe />
-
-    <social />
   </div>
 </template>
 

@@ -52,6 +52,7 @@
           </v-card>
         </v-container>
       </div>
+    </v-img>
             <!--<v-container fluid>-->
             <!--<v-layout row>-->
               <!--<v-card style="width:90%; height:100%" class="mx-auto">-->
@@ -100,7 +101,6 @@
               <!--</v-card>-->
             <!--</v-layout>-->
             <!--</v-container>-->
-    </v-img>
     <div>
       <v-container fluid  grid-list-md pa-2 style="width: 90%">
         <v-card>

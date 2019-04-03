@@ -15,7 +15,19 @@ export default {
   Logout () {
     return Api().post('/customers/logout')
   },
-  EditInfo (customer, email) {
-    return Api().put(`/customers/${email}`, customer)
+  EditInfo (user, one) {
+    return Api().put(`/customers/${user}/edit`, one)
+  },
+  changePass (user, one) {
+    // console.log('REQUESTING ' + user.email + ' ' +
+    //   JSON.stringify(user, null, 5))
+    return Api().put(`/customers/changePassword/${user}`, one,
+      { headers: {'Content-type': 'application/json'} })
+  },
+  forgetPass (user) {
+    return Api().post(`/customers/forgetPassword`, user)
+  },
+  fetchCustomer (email) {
+    return Api().get(`/customers/${email}`)
   }
 }

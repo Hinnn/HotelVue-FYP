@@ -20,11 +20,15 @@
                             @click:append="show = !show"
                             @input="$v.password.$touch()" @blur="$v.password.$touch()">
               </v-text-field>
+              <div class="foot-lnk">
+                <a href="#/forgetPass" for="tab-1">Forget your Password?</a>
+              </div>
+              <v-container fluid>
               <v-radio-group v-model="role" :mandatory="false" row>
-                <v-radio label="Customer" value="customer"></v-radio>
+                <v-radio label="Customer"  value="customer"></v-radio>
                 <v-radio label="Administrator" value="admin"></v-radio>
               </v-radio-group>
-
+              </v-container>
               <v-btn outline color="indigo" flat @click="submit">submit</v-btn>
               <p class="typo__p red--text" v-if="submitStatus === 'ERROR'">Please input email and password correctly.</p>
               <p class="typo__p red--text" v-if="isLogged === 'NO'">{{message}}</p>
@@ -97,13 +101,17 @@ export default {
               this.isLogged = 'NO'
             } else {
               this.isLogged = 'YES'
+              sessionStorage.setItem('email', response.data.data.email)
+              sessionStorage.setItem('role', this.role)
+              // sessionStorage.setItem('name', response.data.data.name)
               this.message = ''
               this.message = response.data.message
               this.submitStatus = 'PENDING'
-              setTimeout(() => {
-                this.$router.go(0)
-              }, 1000)
-              this.$router.push({path: '/Home', query: {id: response.data.data._id, role: this.role}})
+              // setTimeout(() => {
+              //   this.$router.go(0)
+              // }, 1000)
+              this.$router.push({path: '/customerHome'})
+              this.$router.go(0)
             }
           })
         } else if (this.role === 'admin') {
@@ -114,11 +122,14 @@ export default {
               this.message = response.data.message
             } else {
               this.isLogged = 'YES'
+              sessionStorage.setItem('email', response.data.email)
+              sessionStorage.setItem('role', this.role)
+              // sessionStorage.setItem('name', response.data.name)
               this.message = ''
               this.message = response.data.message
               this.submitStatus = 'PENDING'
+              this.$router.push('/adminHome')
               this.$router.go(0)
-              this.$router.push('/Home')
             }
           })
         }

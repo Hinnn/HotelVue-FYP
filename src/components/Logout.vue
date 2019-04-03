@@ -1,9 +1,8 @@
-
 <template>
-  <div id="logout" data-app>
-    <v-layout row justify-center>
-      <v-dialog v-model="dialog" persistent max-width="290">
-        <v-card>
+  <div id="Logout" data-app>
+    <v-container>
+      <v-layout row justify-center>
+        <v-card id="logoutCard" flat style="width: 80%">
           <v-card-title class="headline">Log Out</v-card-title>
           <v-card-text>Are you totally sure to log out?</v-card-text>
           <v-card-actions>
@@ -12,13 +11,14 @@
             <v-btn color="green darken-1" flat="flat" @click="LogOut">Log Out</v-btn>
           </v-card-actions>
         </v-card>
-      </v-dialog>
-    </v-layout>
+      </v-layout>
+    </v-container>
   </div>
 </template>
 
 <script>
 import AdminService from '@/services/adminservice'
+import CustomerService from '@/services/customerservice'
 import Vue from 'vue'
 import VueCookies from 'vue-cookies'
 
@@ -36,23 +36,44 @@ export default {
     cancelDialog () {
       this.openStatus = false
       this.$emit('update-dialog', this.openStatus)
+      this.$router.push('/')
     },
     LogOut () {
-      AdminService.Logout()
-        .then(response => {
-          this.$cookies.remove('user')
-          this.openStatus = false
-          this.$emit('update-dialog', this.openStatus)
-          this.$router.go(0)
-          this.$router.push('/')
-        })
+      this.user_role = sessionStorage.getItem('role')
+      if (this.user_role === 'customer') {
+        CustomerService.Logout()
+          .then(response => {
+            console.log(response.data.data)
+            sessionStorage.removeItem('email')
+            sessionStorage.removeItem('role')
+            sessionStorage.removeItem('name')
+            this.openStatus = false
+            this.$emit('update-dialog', this.openStatus)
+            this.$router.push('/')
+            this.$router.go(0)
+            this.$router.push('/home')
+          })
+      } else if (this.user_role === 'admin') {
+        AdminService.Logout()
+          .then(response => {
+            console.log(response.data.data)
+            sessionStorage.removeItem('email')
+            sessionStorage.removeItem('role')
+            sessionStorage.removeItem('name')
+            this.openStatus = false
+            this.$emit('update-dialog', this.openStatus)
+            this.$router.push('/')
+            this.$router.go(0)
+            this.$router.push('/home')
+          })
+      }
     }
   }
 }
 </script>
 
 <style scoped>
-  #signout{
+  #logout{
     min-width: 500px;
     margin-top: 100px;
   }
