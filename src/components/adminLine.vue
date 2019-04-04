@@ -1,5 +1,5 @@
 <template>
-  <div id="customerline">
+  <div id="adminline">
     <v-divider></v-divider>
     <v-container fluid>
       <v-layout row>
@@ -13,9 +13,9 @@
           <v-btn class="ml-0 hidden-sm-and-down" flat @click="manage">
             Orders
           </v-btn>
-          <v-btn class="ml-0 hidden-sm-and-down" flat @click="getOrder">
-            Order
-          </v-btn>
+          <!--<v-btn class="ml-0 hidden-sm-and-down" flat @click="getOrder">-->
+            <!--Order-->
+          <!--</v-btn>-->
           <v-btn class="ml-0 hidden-sm-and-down" flat @click="changePass">
             Change password
           </v-btn>
@@ -41,9 +41,9 @@ export default {
     manage () {
       this.$router.push('/manageBooking')
     },
-    getOrder () {
-      this.$router.push('/getOrder')
-    },
+    // getOrder () {
+    //   this.$router.push('/getOrder')
+    // },
     changePass () {
       this.$router.push('/changePassword')
     },

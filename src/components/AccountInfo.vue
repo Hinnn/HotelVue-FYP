@@ -40,6 +40,7 @@
 
 <script>
 import CustomerService from '@/services/customerservice'
+// import AdminService from '@/services/adminservice'
 export default {
   name: 'AccountInfo',
   components: {
@@ -85,6 +86,7 @@ export default {
             // console.log(response.data)
             // console.log(this.user)
             console.log('Getting user: ' + JSON.stringify(this.user, null, 5))
+            this.userId = this.user[0]._id
             this.userName = this.user[0].name
             // console.log(this.userName)
             this.phone = this.user[0].phoneNum
@@ -92,56 +94,59 @@ export default {
             this.birthday = this.user[0].DateOfBirth
             this.registerDate = this.user[0].register_date
           })
-        // } else if (this.user_role === 'admin') {
-        //   this.isCustomer = false
-        //   this.isAdmin = true
-        //   AdminService.fetchAdmin(this.userEmail)
-        //     .then(response => {
-        //       this.user = response.data
-        //       this.userName = this.user[0].name
-        //       console.log(this.user)
-        //       console.log('Getting user: ' + JSON.stringify(this.user, null, 5))
-        //     })
-        //     .catch(error => {
-        //       this.errors.push(error)
-        //       console.log(error)
-        //     })
-        // }
-        // // },
-        // getUser () {
-        //   this.userEmail = sessionStorage.getItem('email')
-        //   this.user_role = sessionStorage.getItem('role')
-        //   if (this.user_role === 'customer') {
-        //     this.isCustomer = true
-        //     this.isAdmin = false
-        //     console.log(this.user_role)
-        //     console.log(this.userEmail)
-        //     CustomerService.fetchCustomer(this.userEmail)
-        //       .then(response => {
-        //         this.user = response.data
-        //         console.log(response.data)
-        //         console.log(this.user)
-        //         // this.userEmail = this.user.email
-        //         this.userId = this.user._id
-        //         // console.log(this.user._id)
-        //         this.userName = this.user.name
-        //         this.gender = this.user.Gender
-        //         this.birthday = this.user.DateOfBirth
-        //         this.phone = this.user.phoneNum
-        //       // this.registerDate = this.user.register_date
-        //       })
-        //   } else if (this.user_role === 'admin') {
-        //     this.isCustomer = false
-        //     this.isAdmin = true
-        //     AdminService.fetchAdmin(this.userEmail)
-        //       .then(response => {
-        //         this.user = response.data.data
-        //         console.log(this.user)
-        //         this.userName = this.user.name
-        //         this.userEmail = this.user.email
-        //       })
-        //   }
       }
+      // } else if (this.user_role === 'admin') {
+      //   this.isCustomer = false
+      //   this.isAdmin = true
+      //   console.log(this.user_role)
+      //   console.log(this.userEmail)
+      //   AdminService.fetchAdmin(this.userEmail)
+      //     .then(response => {
+      //       this.user = response.data
+      //       console.log('Getting user: ' + JSON.stringify(this.user, null, 5))
+      //       this.userName = this.user[0].name
+      //       console.log(this.user)
+      //     })
+      //     .catch(error => {
+      //       // this.errors.push(error)
+      //       console.log(error)
+      //     })
+      // }
+      //   // },
+      //   getUser () {
+      //     this.userEmail = sessionStorage.getItem('email')
+      //     this.user_role = sessionStorage.getItem('role')
+      //     if (this.user_role === 'customer') {
+      //       this.isCustomer = true
+      //       this.isAdmin = false
+      //       console.log(this.user_role)
+      //       console.log(this.userEmail)
+      //       CustomerService.fetchCustomer(this.userEmail)
+      //         .then(response => {
+      //           this.user = response.data
+      //           console.log(response.data)
+      //           console.log(this.user)
+      //           // this.userEmail = this.user.email
+      //           this.userId = this.user._id
+      //           // console.log(this.user._id)
+      //           this.userName = this.user.name
+      //           this.gender = this.user.Gender
+      //           this.birthday = this.user.DateOfBirth
+      //           this.phone = this.user.phoneNum
+      //         // this.registerDate = this.user.register_date
+      //         })
+      //     } else if (this.user_role === 'admin') {
+      //       this.isCustomer = false
+      //       this.isAdmin = true
+      //       AdminService.fetchAdmin(this.userEmail)
+      //         .then(response => {
+      //           this.user = response.data.data
+      //           console.log(this.user)
+      //           this.userName = this.user.name
+      //           this.userEmail = this.user.email
+      //         })
+      //     }
+      // }
     },
     editUser () {
       this.$router.push('/EditInfo')

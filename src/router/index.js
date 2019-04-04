@@ -17,6 +17,7 @@ import changePassword from '@/components/changePassword'
 import adminHome from '@/components/adminHome'
 // import addRoom from '@/components/addRoom'
 // import Book from '@/components/Book'
+import AdminInfo from '@/components/AdminInfo'
 import manageBooking from '@/components/manageBooking'
 Vue.use(Router)
 
@@ -96,7 +97,7 @@ export default new Router({
       path: '/manageBooking',
       name: 'manageBooking',
       component: manageBooking
-    // },
+    },
     // {
     //   path: '/addRoom',
     //   name: 'addRoom',
@@ -106,6 +107,11 @@ export default new Router({
     //   path: '/Book',
     //   name: 'Book',
     //   component: Book
+    // },
+    {
+      path: '/AdminInfo',
+      name: 'AdminInfo',
+      component: AdminInfo
     }
   ]
 })

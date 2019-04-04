@@ -50,8 +50,6 @@ export default {
       // updateOne: {},
       valid: false,
       user: {},
-      // temp: {},
-      // date: '',
       DateOfBirth: '',
       phoneNum: '',
       Gender: '',
@@ -66,23 +64,12 @@ export default {
 
     customerLine: () => import('@/components/customerLine')
   },
-  // computed: {
-  //   form () {
-  //     return {
-  //       phoneNum: this.phoneNum,
-  //       Gender: this.Gender,
-  //       DateOfBirth: this.date
-  //     }
-  //   }
-  // },
   watch: {
     menu (val) {
       val && this.$nextTick(() => (this.$refs.picker.activePicker = 'YEAR'))
     }
   },
-  // created () {
-  //   this.editInfo()
-  // },
+
   methods: {
     save (DateOfBirth) {
       this.$refs.menu.save(DateOfBirth)
@@ -112,6 +99,7 @@ export default {
           // console.log(this.user)
           console.log(response.data.data)
           console.log('After editing: ' + JSON.stringify(this.user, null, 5))
+          this.$router.push('/AccountInfo')
         })
         .catch(error => {
           console.log(error.response)

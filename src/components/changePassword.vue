@@ -120,6 +120,10 @@ export default {
           // console.log(this.user)
           console.log(response.data)
           console.log('After editing: ' + JSON.stringify(this.user, null, 5))
+          sessionStorage.removeItem('email')
+          sessionStorage.removeItem('role')
+          sessionStorage.removeItem('name')
+          this.$router.push('/Login')
         })
         .catch(error => {
           console.log(error.response)

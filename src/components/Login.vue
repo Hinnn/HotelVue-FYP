@@ -80,7 +80,7 @@ export default {
       email: '',
       password: '',
       show: false,
-      role: 'customer',
+      role: '',
       submitStatus: null,
       isLogged: null,
       message: ''
@@ -110,11 +110,12 @@ export default {
               // setTimeout(() => {
               //   this.$router.go(0)
               // }, 1000)
-              this.$router.push({path: '/customerHome'})
+              this.$router.push({path: '/AccountInfo'})
               this.$router.go(0)
             }
           })
         } else if (this.role === 'admin') {
+          let user = {'email': this.email, 'password': this.password}
           AdminService.Login(user).then(response => {
             if (response.data.data === null) {
               this.isLogged = 'NO'
@@ -122,13 +123,16 @@ export default {
               this.message = response.data.message
             } else {
               this.isLogged = 'YES'
-              sessionStorage.setItem('email', response.data.email)
+              sessionStorage.setItem('id', response.data.data._id)
+              sessionStorage.setItem('email', response.data.data.email)
               sessionStorage.setItem('role', this.role)
-              // sessionStorage.setItem('name', response.data.name)
+              console.log(response.data.data.email)
+              console.log(response.data._id)
+              console.log(this.role)
               this.message = ''
               this.message = response.data.message
               this.submitStatus = 'PENDING'
-              this.$router.push('/adminHome')
+              this.$router.push('/AdminInfo')
               this.$router.go(0)
             }
           })
