@@ -1,14 +1,19 @@
 <template>
   <div class="hero">
     <adminLine />
-    <h3 class="vue-title"><i class="fa fa-list" style="padding: 3px"></i>{{messagetitle}}</h3>
-    <div id="app1">
+    <h3 class="vue-title"><i class="fa fa-list" style="padding: 3px"></i>Orders</h3>
+    <v-text id="app1">
       <v-client-table :columns="columns" :data="bookings" :options="options">
-        <a slot="edit" slot-scope="props" class="fa fa-edit fa-2x" @click="editBooking(props.row.email)"></a>
-        <a slot="remove" slot-scope="props" class="fa fa-trash-o fa-2x" @click="deleteBooking(props.row.email)"></a>
+        <!--<v-text>Check in Date: {{props.row.checkin_date|moment}} </v-text>-->
+        <v-btn flat icon color="indigo" slot="edit" slot-scope="props" @click="editBooking(props.row._id)">
+        <v-icon>edit</v-icon>
+      </v-btn>
+        <v-btn flat icon color="indigo" slot="remove" slot-scope="props" @click="deleteBooking(props.row._id)">
+          <v-icon>delete</v-icon>
+        </v-btn>
       </v-client-table>
+    </v-text>
     </div>
-  </div>
 </template>
 
 <script>
@@ -24,21 +29,35 @@ export default {
     return {
       bookings: [],
       props: ['booking'],
+      // props: {
+      //   _id: String,
+      //   email: String,
+      //   name: String,
+      //   contactNum: Number,
+      //   amount: Number,
+      //   // payment_status: Boolean,
+      //   roomType: String,
+      //   roomNum: String,
+      //   checkin_date: Date,
+      //   leave_date: Date
+      // },
       errors: [],
-      columns: ['_id', 'email', 'name', 'contactNum', 'amount', 'payment_status', 'roomType', 'checkin_date', 'leave_date', 'edit', 'remove'],
+      childDataLoaded: false,
+      columns: ['_id', 'email', 'name', 'contactNum', 'amount', 'roomType', 'roomNum', 'checkin_date', 'leave_date', 'payment_status', 'edit', 'remove'],
       options: {
         perPage: 10,
-        filterable: ['roomType', 'email', 'checkin_date', 'leave_date'],
+        filterable: ['roomType', 'email', 'checkin_date', 'leave_date', 'name', 'payment_status'],
         headings: {
-          _id: 'ID',
-          email: 'Email',
+          _id: 'Order ID',
+          email: 'Account',
           name: 'Name',
           contactNum: 'Contact Phone',
-          leave_date: 'Leave Date',
           amount: 'Amount',
           roomType: 'Room Type',
-          payment_status: 'Payment Status',
-          checkin_date: 'Check in Date'
+          roomNum: 'Room Number',
+          checkin_date: 'Check in Date',
+          leave_date: 'Leave Date',
+          payment_status: 'Payment Status'
         }
       }
     }
@@ -50,32 +69,35 @@ export default {
   // Fetches Bookings when the component is created.
   created () {
     this.loadBookings()
+    // this.getBooking()
   },
   methods: {
     loadBookings: function () {
-      this.userEmail = sessionStorage.getItem('email')
-      this.user_role = sessionStorage.getItem('role')
-      if (this.user_role === 'admin') {
-        BookingSer.fetchBookings()
-          .then(response => {
-            // JSON responses are automatically parsed.
-            this.bookings = response.data
-            console.log(this.bookings)
-          })
-          .catch(error => {
-            this.errors.push(error)
-            console.log(error)
-          })
-      } else {
-        console.log('You can not do this operation!')
-      }
+      // this.email = sessionStorage.getItem('email')
+      // this.id = sessionStorage.getItem('id')
+      // this.user_role = sessionStorage.getItem('role')
+      // if (this.user_role === 'admin') {
+      // console.log(this.id)
+      BookingSer.fetchBookings()
+        .then(response => {
+          // JSON responses are automatically parsed.
+          this.bookings = response.data
+          console.log(this.bookings)
+        })
+        .catch(error => {
+          this.errors.push(error)
+          console.log(error)
+        })
+      // } else {
+      //   console.log('You can not do this operation!')
+      // }
     },
     // Fetches Bookings when the component is created
-    editBooking: function (email) {
-      this.$router.params = email
-      // this.$router.push('edit')
+    editBooking: function (_id) {
+      this.$router.params = _id
+      this.$router.push('/editOrder')
     },
-    deleteBooking: function (email) {
+    deleteBooking: function (_id) {
       this.$swal({
         title: 'Are you totally sure:',
         text: 'You can\'t Undo this action',
@@ -88,7 +110,9 @@ export default {
       }).then((result) => {
         console.log('SWAL Result : ' + result.value)
         if (result.value === true) {
-          BookingSer.deleteBooking(email)
+          // let id = this.booking._id
+          // console.log(id)
+          BookingSer.deleteBooking(_id)
             .then(response => {
               // JSON responses are automatically parsed.
               this.message = response.data

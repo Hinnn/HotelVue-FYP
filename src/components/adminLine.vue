@@ -13,14 +13,17 @@
           <v-btn class="ml-0 hidden-sm-and-down" flat @click="manage">
             Orders
           </v-btn>
-          <!--<v-btn class="ml-0 hidden-sm-and-down" flat @click="getOrder">-->
-            <!--Order-->
-          <!--</v-btn>-->
+          <v-btn class="ml-0 hidden-sm-and-down" flat @click="editOrder">
+            Edit Order
+          </v-btn>
           <v-btn class="ml-0 hidden-sm-and-down" flat @click="changePass">
             Change password
           </v-btn>
           <v-btn class="ml-0 hidden-sm-and-down" flat @click="accountInfo">
             Account
+          </v-btn>
+          <v-btn class="ml-0 hidden-sm-and-down" flat @click="customerList">
+            Customer List
           </v-btn>
         </v-flex>
       </v-layout>
@@ -41,14 +44,17 @@ export default {
     manage () {
       this.$router.push('/manageBooking')
     },
-    // getOrder () {
-    //   this.$router.push('/getOrder')
-    // },
+    editOrder () {
+      this.$router.push('/editOrder')
+    },
     changePass () {
       this.$router.push('/changePassword')
     },
     accountInfo () {
       this.$router.push('/AdminInfo')
+    },
+    customerList () {
+      this.$router.push('/customerList')
     }
   }
 }

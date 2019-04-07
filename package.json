@@ -19,6 +19,7 @@
     "clean-webpack-plugin": "^1.0.1",
     "firebase": "^5.9.1",
     "hellojs": "^1.17.1",
+    "moment": "^2.24.0",
     "swal": "^0.1.0",
     "validator": "^10.11.0",
     "vue": "^2.5.2",

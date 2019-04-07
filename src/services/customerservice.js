@@ -29,5 +29,11 @@ export default {
   },
   fetchCustomer (email) {
     return Api().get(`/customers/${email}`)
+  },
+  deleteCustomer (user, email) {
+    return Api().delete(`/${user}/customers/${email}`)
+  },
+  fetchCustomers (user) {
+    return Api().get(`/${user}/customers`)
   }
 }

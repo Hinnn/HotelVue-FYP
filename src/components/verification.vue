@@ -103,7 +103,7 @@ export default {
                 this.isVerified = 'YES'
                 this.message = 'Congratulations! Your account has been verified!'
                 this.submitStatus = 'PENDING'
-                // this.$router.push('/Login')
+                this.$router.push('/Login')
               }
               console.log(response.data)
             })
@@ -120,7 +120,7 @@ export default {
                 this.isVerified = 'YES'
                 this.message = 'Congratulations! Your account has been verified!'
                 this.submitStatus = 'PENDING'
-                // this.$router.push('/Login')
+                this.$router.push('/Login')
               }
               console.log(response.data)
             })

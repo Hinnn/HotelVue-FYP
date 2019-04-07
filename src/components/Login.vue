@@ -101,6 +101,7 @@ export default {
               this.isLogged = 'NO'
             } else {
               this.isLogged = 'YES'
+              sessionStorage.setItem('token', response.headers.token)
               sessionStorage.setItem('email', response.data.data.email)
               sessionStorage.setItem('role', this.role)
               // sessionStorage.setItem('name', response.data.data.name)
@@ -124,9 +125,11 @@ export default {
             } else {
               this.isLogged = 'YES'
               sessionStorage.setItem('id', response.data.data._id)
+              const token = response.data.token
+              sessionStorage.setItem('token', token)
               sessionStorage.setItem('email', response.data.data.email)
               sessionStorage.setItem('role', this.role)
-              console.log(response.data.data.email)
+              console.log(token)
               console.log(response.data._id)
               console.log(this.role)
               this.message = ''

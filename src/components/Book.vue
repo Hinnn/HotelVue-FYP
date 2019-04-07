@@ -11,71 +11,42 @@
               placeholder="people who will check in"
               required>
             </v-text-field>
-            <v-text-field ref="email"
-                          v-model="email"
-                          :rules="[() => !!email || 'This field is required', emailCheck]"
-                          label="Email"
-                          placeholder="contact email"
-                          required>
-
+            <v-text-field v-model="email"
+                          :error-messages="checkEmail"
+                          label="Email" required
+                          @input="$v.email.$touch()" @blur="$v.email.$touch()">
             </v-text-field>
-            <v-text-field ref="contactNum"
-                          :rules="[() => !!contactNum || 'This field is required']"
-                          label="Contact phone number"
-                          placeholder="10 digital contact phone number"
-                          required>
-
-            </v-text-field>
-            <v-menu
-              ref="menu" v-model="menu"
-              :close-on-content-click="false"
-              :nudge-right="40"
-              lazy
-              transition="scale-transition"
-              offset-y
-              full-width
-              min-width="290px"
-            >
-              <template slot="activator">
-                <v-text-field
-                  v-model="date"
-                  label="Check in date"
-                  prepend-icon="event"
-                  readonly
-                ></v-text-field>
-              </template>
-              <v-date-picker
-                ref="picker"
-                v-model="date"
-                :max="new Date().toISOString().substr(0, 10)"
-                @change="save"
-              ></v-date-picker>
-            </v-menu>
-            <v-menu
-              ref="menu" v-model="menu"
-              :close-on-content-click="false"
-              :nudge-right="40"
-              lazy
-              transition="scale-transition"
-              offset-y
-              full-width
-              min-width="290px"
-            >
-              <template slot="activator">
-                <v-text-field
-                  v-model="date"
-                  label="leave date"
-                  prepend-icon="event"
-                  readonly
-                ></v-text-field>
-              </template>
-              <v-date-picker
-                ref="picker"
-                v-model="date"
-                :max="new Date().toISOString().substr(0, 10)"
-                @change="save"
-              ></v-date-picker>
-            </v-menu>
+            <v-text-field
+            v-model="contactNum" :counter="10" label="Contact Number"
+            prepend-icon="phone" :rules="phoneRules"
+            ></v-text-field>
+            <div id = "checkin_date">
+              <v-menu
+                v-model="menu1" :close-on-content-click="false" :nudge-right="40"
+                lazy transition="scale-transition" offset-y DateCheck>
+                <template slot="activator">
+                  <v-text-field v-model="checkin_date" label="CheckIn Date" prepend-icon="event" readonly v-on="on" required>
+                  </v-text-field>
+                </template>
+                <v-date-picker v-model="checkin_date" @on-change="startTimeChange" @input="menu1 = false"></v-date-picker>
+              </v-menu>
+            </div>
+            <div id = "leave_date">
+              <v-menu
+                v-model="menu2" :close-on-content-click="false" :nudge-right="40"
+                lazy transition="scale-transition" offset-y>
+                <template slot="activator">
+                  <v-text-field v-model="leave_date" label="CheckOut Date" prepend-icon="event" readonly v-on="on" required>
+                  </v-text-field>
+                </template>
+                <v-date-picker v-model="leave_date" @on-change="endTimeChange" @input="menu2 = false"></v-date-picker>
+              </v-menu>
+            </div>
+            <div id = "roomType">
+              <v-select
+                :items="items" label="Room Type" prepend-icon="hotel"
+              ></v-select>
+            </div>
           </v-card-text>
           <v-divider class="mt-5"></v-divider>
           <v-card-actions>
@@ -98,22 +69,33 @@
 import BookingService from '@/services/bookingservices'
 import Vue from 'vue'
 import Vuelidate from 'vuelidate'
+// import { required, email } from 'vuelidate/lib/validators'
 Vue.use(Vuelidate)
-
 export default {
   name: 'Book',
-
+  // validations: {
+  //   email: {required, email}
+  // },
   data: () => ({
-    errorMessages: '',
-    name: null,
-    email: null,
-    contactNum: null,
-    checkin_date: null,
-    leave_date: null,
+    // errorMessages: '',
+    name: '',
+    email: '',
+    contactNum: '',
+    checkin_date: '',
+    leave_date: '',
     formErrors: false,
     submitStatus: null,
     isReserved: null,
-    message: ''
+    message: '',
+    date: new Date().toISOString().substr(0, 10),
+    menu1: false,
+    menu2: false,
+    items: ['double', 'single', 'family'],
+    startTimeOptions: {}, // 开始日期约束
+    endTimeOptions: {},
+    phoneRules: [
+      v => (v && v.length <= 10) || 'Phone number must be 10 characters'
+    ]
   }),
   computed: {
     form () {
@@ -131,11 +113,40 @@ export default {
       this.errorMessages = ''
     }
   },
+  components: {
+
+    customerLine: () => import('@/components/customerLine')
+  },
   methods: {
-    emailCheck () {
-      let checkEmail = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(\.[a-zA-Z0-9_-])+/
-      this.errorMessages = checkEmail.test(this.email) ? '' : 'Wrong email format!'
-      return this.errorMessages
+    startTimeChange: function (e) { // 设置开始时间
+      this.checkin_date = e
+      this.endTimeOptions = {
+        disabledDate (date) {
+          let startTime = this.checkin_date ? new Date(this.checkin_date).valueOf() : ''
+          return date && (date.valueOf() < startTime)
+        }
+      }
+    },
+    endTimeChange: function (e) { // 设置结束时间
+      this.leave_date = e
+      let endTime = this.leave_date ? new Date(this.leave_date).valueOf() - 1 * 24 * 60 * 60 * 1000 : ''
+      this.startTimeOptions = {
+        disabledDate (date) {
+          return date && date.valueOf() > endTime
+        }
+      }
+    },
+    // emailCheck () {
+    //   let checkEmail = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(\.[a-zA-Z0-9_-])+/
+    //   this.errorMessages = checkEmail.test(this.email) ? '' : 'Wrong email format!'
+    //   return this.errorMessages
+    // },
+    checkEmail () {
+      const errors = []
+      if (!this.$v.email.$dirty) return errors
+      !this.$v.email.email && errors.push('Please input valid email')
+      !this.$v.email.required && errors.push('Email is required')
+      return errors
     },
     clear () {
       this.$v.$reset()

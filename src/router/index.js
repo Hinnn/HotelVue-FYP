@@ -16,9 +16,11 @@ import customerSearch from '@/components/customerSearch'
 import changePassword from '@/components/changePassword'
 import adminHome from '@/components/adminHome'
 // import addRoom from '@/components/addRoom'
-// import Book from '@/components/Book'
+import editOrder from '@/components/editOrder'
 import AdminInfo from '@/components/AdminInfo'
 import manageBooking from '@/components/manageBooking'
+import customerList from '@/components/customerList'
+import book from '@/components/book'
 Vue.use(Router)
 
 export default new Router({
@@ -103,15 +105,25 @@ export default new Router({
     //   name: 'addRoom',
     //   component: addRoom
     // },
-    // {
-    //   path: '/Book',
-    //   name: 'Book',
-    //   component: Book
-    // },
+    {
+      path: '/editOrder',
+      name: 'editOrder',
+      component: editOrder
+    },
     {
       path: '/AdminInfo',
       name: 'AdminInfo',
       component: AdminInfo
+    },
+    {
+      path: '/customerList',
+      name: 'customerList',
+      component: customerList
+    },
+    {
+      path: '/book',
+      name: 'book',
+      component: book
     }
   ]
 })

@@ -15,7 +15,7 @@
                   <div class="headline">Email: {{userEmail}}</div>
                 </v-card-title>
                   <v-card-title primary-title>
-                  <div class="headline">Birthday: {{birthday}}</div>
+                  <div class="headline">Birthday: {{birthday|moment}}</div>
                   </v-card-title>
                     <v-card-title primary-title>
                   <div class="headline">Gender: {{gender}}</div>
@@ -24,7 +24,7 @@
                   <div class="headline">Phone Number: {{phone}}</div>
                 </v-card-title>
                 <v-card-title primary-title>
-                  <div class="headline">Register Date: {{registerDate}}</div>
+                  <div class="headline">Register Date: {{registerDate|moment}}</div>
                 </v-card-title>
                 <v-card-actions>
                   <v-layout justify-center row>

@@ -13,6 +13,7 @@ import VueForm from 'vueform'
 import Vuelidate from 'vuelidate'
 import VueSweetalert2 from 'vue-sweetalert2'
 import * as VueGoogleMaps from 'vue2-google-maps'
+import moment from 'moment/moment'
 Vue.config.productionTip = false
 
 // Vue.use(Vuetify, {
@@ -29,6 +30,10 @@ Vue.use(VueMq, {
     laptop: 1250,
     desktop: Infinity
   }
+})
+Vue.filter('moment', function (value, formatString) {
+  formatString = formatString || 'YYYY-MM-DD'
+  return moment(value).format(formatString)
 })
 Vue.use(VueForm, {
   inputClasses: {

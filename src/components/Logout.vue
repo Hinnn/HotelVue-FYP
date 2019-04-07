@@ -46,7 +46,7 @@ export default {
             console.log(response.data.data)
             sessionStorage.removeItem('email')
             sessionStorage.removeItem('role')
-            sessionStorage.removeItem('name')
+            sessionStorage.removeItem('token')
             this.openStatus = false
             this.$emit('update-dialog', this.openStatus)
             this.$router.push('/')
@@ -59,7 +59,7 @@ export default {
             console.log(response.data.data)
             sessionStorage.removeItem('email')
             sessionStorage.removeItem('role')
-            sessionStorage.removeItem('name')
+            sessionStorage.removeItem('token')
             this.openStatus = false
             this.$emit('update-dialog', this.openStatus)
             this.$router.push('/')

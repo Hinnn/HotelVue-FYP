@@ -31,7 +31,7 @@ export default {
     'add-room-form': RoomForm
   },
   methods: {
-    addProduct: function (room) {
+    addRoom: function (room) {
       let user = sessionStorage.getItem('email')
       RoomService.addRoom(user, room).then(response => {
       })

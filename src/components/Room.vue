@@ -1,13 +1,17 @@
 <template>
   <div class="hero" id="room">
     <customerLine />
-    <h3 class="vue-title"><i class="fa fa-list" style="padding: 3px"></i>{{messagetitle}}</h3>
+    <h3 class="vue-title"><i class="fa fa-list" style="padding: 3px"></i>Room List</h3>
     <table align="center">
     </table>
     <div id="app1">
       <v-client-table :columns="columns" :data="rooms" :options="options">
-        <a slot="upvote" slot-scope="props" class="fa fa-thumbs-up-alt fa-2x" @click="upvote(props.row.roomNum)"></a>
-        <a slot="remove" slot-scope="props" class="fa fa-trash-o fa-2x" @click="deleteRoom(props.row.roomNum)"></a>
+        <v-btn flat icon color="deep-orange" slot="upvote" slot-scope="props" @click="upvote(props.row.roomNum)">
+          <v-icon>thumb_up</v-icon>
+        </v-btn>
+        <v-btn flat icon color="indigo" slot="remove" slot-scope="props" @click="deleteRoom(props.row.roomNum)">
+          <v-icon>delete</v-icon>
+        </v-btn>
       </v-client-table>
     </div>
   </div>
@@ -60,9 +64,10 @@ export default {
     return {
       size: 'sm',
       rooms: [],
-      props: ['roomNum'],
+      props: ['rooms'],
       errors: [],
-      columns: ['roomNum', 'roomType', 'price', 'upvotes', 'upvote'],
+      childDataLoaded: false,
+      columns: ['roomNum', 'roomType', 'price', 'isEmpty', 'upvotes', 'upvote', 'remove'],
       options: {
         perPage: 10,
         filterable: ['roomNum', 'roomType', 'price'],
@@ -71,6 +76,7 @@ export default {
           roomNum: 'roomNum',
           roomType: 'Type',
           price: 'price',
+          isEmpty: 'status',
           upvotes: 'Upvotes'
         }
       }
@@ -109,9 +115,7 @@ export default {
           console.log(error)
         })
     },
-    // Fetches Bookings when the component is created
     deleteRoom: function (roomNum) {
-      let user = sessionStorage.getItem('email')
       this.$swal({
         title: 'Are you totally sure:',
         text: 'You can\'t Undo this action',
@@ -124,23 +128,26 @@ export default {
       }).then((result) => {
         console.log('SWAL Result : ' + result.value)
         if (result.value === true) {
-          RoomService.deleteRoom(user, roomNum)
-            .then(response => {
-              // JSON responses are automatically parsed.
-              this.message = response.data
-              console.log(this.message)
-              this.loadRooms()
-              // Vue.nextTick(() => this.$refs.vuetable.refresh())
-              this.$swal('Deleted', 'You successfully deleted this Room ' + JSON.stringify(response.data, null, 5), 'success')
-            })
-            .catch(error => {
-              this.$swal('EREOR', 'Something went wrong trying to Delete ' + error, 'error')
-              this.errors.push(error)
-              console.log(error)
-            })
-        } else {
-          console.log(' SWAL Else Result: ' + result.value)
-          this.$swal('Cancelled', 'This room Still Exist!', 'info')
+          this.user = sessionStorage.getItem('email')
+          this.user_role = sessionStorage.getItem('role')
+          if (this.user_role === 'admin') {
+            console.log(this.user)
+            RoomService.deleteRoom(this.user, roomNum)
+              .then(response => {
+                this.message = response.data
+                console.log(this.message)
+                this.loadRooms()
+                this.$swal('Deleted', 'You successfully deleted this room ' + JSON.stringify(response.data, null, 5), 'success')
+              })
+              .catch(error => {
+                this.$swal('EREOR', 'Something went wrong trying to Delete ' + error, 'error')
+                this.errors.push(error)
+                console.log(error)
+              })
+          } else {
+            console.log(' SWAL Else Result: ' + result.value)
+            this.$swal('Cancelled', 'Room Still Exist!', 'info')
+          }
         }
       })
     }

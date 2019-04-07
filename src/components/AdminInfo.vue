@@ -15,13 +15,8 @@
             <div class="headline">Email: {{userEmail}}</div>
           </v-card-title>
           <v-card-title primary-title>
-            <div class="headline">Register Date: {{registerDate}}</div>
+            <div class="headline">Register Date: {{registerDate|moment}} </div>
           </v-card-title>
-          <!--<v-card-actions>-->
-            <!--<v-layout justify-center row>-->
-              <!--<v-btn depressed color="primary" flat @click="editUser">Edit Account</v-btn>-->
-            <!--</v-layout>-->
-          <!--</v-card-actions>-->
         </v-card>
       </v-flex>
     </v-layout>
@@ -44,6 +39,7 @@ export default {
       isCustomer: false,
       userId: '',
       userName: '',
+      email: '',
       userEmail: '',
       registerDate: '',
       name: '',
@@ -57,26 +53,23 @@ export default {
   methods: {
     getUser () {
       this.userEmail = sessionStorage.getItem('email')
+      // this.token = sessionStorage.getItem('token')
       this.user_role = sessionStorage.getItem('role')
       this.id = sessionStorage.getItem('id')
       if (this.user_role === 'admin') {
         this.isCustomer = false
         this.isAdmin = true
+        console.log(this.id)
         console.log(this.user_role)
         console.log(this.userEmail)
-        AdminService.fetchAdmin(this.id)
+        AdminService.fetchAdmin(this.userEmail)
           .then(response => {
             this.user = response.data
-            // console.log(response.data)
-            // console.log(this.user)
             console.log('Getting user: ' + JSON.stringify(this.user, null, 5))
             this.userId = this.id
-            this.userName = this.user.name
-            // console.log(this.userName)
-            // this.adminID = this.user[0].adminID
-            // this.gender = this.user[0].Gender
-            // this.birthday = this.user[0].DateOfBirth
-            this.registerDate = this.user.register_date
+            this.userName = this.user[0].name
+            // this.email = this.user.email
+            this.registerDate = this.user[0].register_date
           })
       }
     }

@@ -9,10 +9,13 @@ export default {
   upvoteRoom (roomNum) {
     return Api().put(`/rooms/upvotes/${roomNum}`)
   },
-  deleteRoom (admin, roomNum) {
-    return Api().delete(`/${admin}/rooms/${roomNum}`)
+  addRoom (user) {
+    return Api().post(`/${user}/rooms`)
   },
-  addRoom (admin) {
-    return Api().post(`/${admin}/rooms`)
+  fetchRoom (roomNum) {
+    return Api().get(`/rooms/${roomNum}`)
+  },
+  deleteRoom (user, roomNum) {
+    return Api().delete(`/${user}/rooms/${roomNum}`)
   }
 }
