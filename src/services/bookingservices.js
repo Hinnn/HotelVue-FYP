@@ -5,8 +5,8 @@ export default {
     return Api().get(`/bookings`)
   },
   addBooking (booking) {
-    return Api().post('/bookings', booking,
-      {headers: {'Content-type': 'application/json'}})
+    return Api().post('/bookings', booking)
+    // {headers: {'Content-type': 'application/json'}})
   },
   fetchBooking (email) {
     return Api().get(`/bookings/${email}`)

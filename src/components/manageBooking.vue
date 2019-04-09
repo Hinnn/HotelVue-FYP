@@ -15,7 +15,6 @@
     </v-text>
     </div>
 </template>
-
 <script>
 import BookingSer from '@/services/bookingservices'
 import Vue from 'vue'
