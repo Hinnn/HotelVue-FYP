@@ -10,11 +10,11 @@
             <!--v-model="contactNum" :counter="10" label="Contact Number"-->
             <!--prepend-icon="phone" :rules="phoneRules"-->
           <!--&gt;</v-text-field>-->
-    <v-select v-model="roomNum"
+    <v-select v-model="roomID"
       :items="items" label="Room Number" prepend-icon="local_hotel"
     ></v-select>
             <!--<v-text-field-->
-              <!--v-model="roomNum" :counter="10" label="Room Number"-->
+              <!--v-model="roomID" :counter="10" label="Room Number"-->
               <!--prepend-icon="local_hotel" :rules="phoneRules"-->
             <!--&gt;</v-text-field>-->
           </v-card-text>
@@ -40,7 +40,7 @@ export default {
       booking: {},
       childDataLoaded: false,
       // contactNum: '',
-      roomNum: '',
+      roomID: '',
       items: ['101', '102', '103'],
       id: ''
       // phoneRules: [
@@ -60,7 +60,7 @@ export default {
     clear () {
       this.$v.$reset()
       // this.contactNum = ''
-      this.roomNum = ''
+      this.roomID = ''
     },
     // getBooking: function () {
     //   BookingSer.fetchOneBooking(this.$router.params).then(response => {
@@ -78,7 +78,7 @@ export default {
       console.log(id)
       let updateOne = {
         // contactNum: this.contactNum,
-        roomNum: this.roomNum
+        roomID: this.roomID
       }
       console.log(updateOne)
       BookingSer.editBooking(id, updateOne)

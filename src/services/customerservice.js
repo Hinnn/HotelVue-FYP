@@ -15,14 +15,15 @@ export default {
   Logout () {
     return Api().post('/customers/logout')
   },
-  EditInfo (user, one) {
-    return Api().put(`/customers/${user}/edit`, one)
+  EditInfo (user, one, token) {
+    return Api().put(`/customers/${user}/edit`, one,
+      { headers: {'Content-type': 'application/json', 'token': token} })
   },
-  changePass (user, one) {
+  changePass (user, one, token) {
     // console.log('REQUESTING ' + user.email + ' ' +
     //   JSON.stringify(user, null, 5))
     return Api().put(`/customers/changePassword/${user}`, one,
-      { headers: {'Content-type': 'application/json'} })
+      { headers: {'Content-type': 'application/json', 'token': token} })
   },
   forgetPass (user) {
     return Api().post(`/customers/forgetPassword`, user)
@@ -30,10 +31,12 @@ export default {
   fetchCustomer (email) {
     return Api().get(`/customers/${email}`)
   },
-  deleteCustomer (user, email) {
-    return Api().delete(`/${user}/customers/${email}`)
+  deleteCustomer (user, email, token) {
+    return Api().delete(`/${user}/customers/${email}`,
+      { headers: {'Content-type': 'application/json', 'token': token} })
   },
-  fetchCustomers (user) {
-    return Api().get(`/${user}/customers`)
+  fetchCustomers (user, token) {
+    return Api().get(`/${user}/customers`,
+      { headers: {'Content-type': 'application/json', 'token': token} })
   }
 }

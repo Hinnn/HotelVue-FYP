@@ -1,12 +1,11 @@
 import Api from '@/services/api'
 
 export default {
-  fetchBookings () {
-    return Api().get(`/bookings`)
+  fetchBookings (token) {
+    return Api().get(`/bookings`, {headers: {'token': token}})
   },
   addBooking (booking) {
-    return Api().post('/bookings', booking)
-    // {headers: {'Content-type': 'application/json'}})
+    return Api().post('/bookings', booking, {headers: {'Content-type': 'application/json'}})
   },
   fetchBooking (email) {
     return Api().get(`/bookings/${email}`)

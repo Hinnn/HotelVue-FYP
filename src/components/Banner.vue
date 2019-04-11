@@ -19,7 +19,7 @@
                     v-model="menu1" :close-on-content-click="false" :nudge-right="40"
                     lazy transition="scale-transition" offset-y DateCheck>
                     <template slot="activator">
-                    <v-text-field v-model="checkin_date" label="CheckIn Date" prepend-icon="event" readonly v-on="on" required>
+                    <v-text-field v-model="checkin_date" label="CheckIn Date" prepend-icon="event" readonly required>
                     </v-text-field>
                     </template>
                     <v-date-picker v-model="checkin_date" @on-change="startTimeChange" @input="menu1 = false"></v-date-picker>
@@ -33,7 +33,7 @@
                 v-model="menu2" :close-on-content-click="false" :nudge-right="40"
                 lazy transition="scale-transition" offset-y>
                 <template slot="activator">
-                <v-text-field v-model="leave_date" label="CheckOut Date" prepend-icon="event" readonly v-on="on" required>
+                <v-text-field v-model="leave_date" label="CheckOut Date" prepend-icon="event" readonly required>
                 </v-text-field>
                 </template>
                 <v-date-picker v-model="leave_date" @on-change="endTimeChange" @input="menu2 = false"></v-date-picker>

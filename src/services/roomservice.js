@@ -6,16 +6,22 @@ export default {
     return Api().get('/rooms', room,
       {headers: {'Content-type': 'application/json'}})
   },
-  upvoteRoom (roomNum) {
-    return Api().put(`/rooms/upvotes/${roomNum}`)
+  upvoteRoom (user, roomID, token) {
+    return Api().put(`/${user}/rooms/upvotes/${roomID}`, {headers: {'token': token}})
   },
-  addRoom (user) {
-    return Api().post(`/${user}/rooms`)
+  addRoom (user, room, token) {
+    return Api().post(`/${user}/rooms`, room, {headers: {'token': token}})
   },
-  fetchRoom (roomNum) {
-    return Api().get(`/rooms/${roomNum}`)
+  fetchRoom (roomID) {
+    return Api().get(`/rooms/byNum/${roomID}`)
   },
-  deleteRoom (user, roomNum) {
-    return Api().delete(`/${user}/rooms/${roomNum}`)
+  fetchType (roomType) {
+    return Api().get(`/rooms/byType/${roomType}`)
+  },
+  deleteRoom (user, roomID, token) {
+    return Api().delete(`/${user}/rooms/${roomID}`, {headers: {'token': token}})
+  },
+  editRoom (user, roomID, token) {
+    return Api().put(`/${user}/rooms/edit/${roomID}`, {headers: {'token': token}})
   }
 }

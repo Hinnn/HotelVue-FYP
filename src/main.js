@@ -14,6 +14,7 @@ import Vuelidate from 'vuelidate'
 import VueSweetalert2 from 'vue-sweetalert2'
 import * as VueGoogleMaps from 'vue2-google-maps'
 import moment from 'moment/moment'
+// import Auth from 'vue-token'
 Vue.config.productionTip = false
 
 // Vue.use(Vuetify, {
@@ -31,6 +32,7 @@ Vue.use(VueMq, {
     desktop: Infinity
   }
 })
+// Vue.use(Auth)
 Vue.filter('moment', function (value, formatString) {
   formatString = formatString || 'YYYY-MM-DD'
   return moment(value).format(formatString)
@@ -50,25 +52,7 @@ Vue.use(VueGoogleMaps, {
     key: 'AIzaSyDITmc7Hn86sX0IWKSlycvmr_M0YG-QwhA',
     // key: 'AIzaSyCnEJk8higuHy3o-wUutB2-qpqwVlJjU38',
     libraries: 'places' // This is required if you use the Autocomplete plugin
-    // OR: libraries: 'places,drawing'
-    // OR: libraries: 'places,drawing,visualization'
-    // (as you require)
-
-    // If you want to set the version, you can do so:
-    // v: '3.26',
   }
-
-  // If you intend to programmatically custom event listener code
-  // (e.g. `this.$refs.gmap.$on('zoom_changed', someFunc)`)
-  // instead of going through Vue templates (e.g. `<GmapMap @zoom_changed="someFunc">`)
-  // you might need to turn this on.
-  // autobindAllEvents: false,
-
-  // If you want to manually install components, e.g.
-  // import {GmapMarker} from 'vue2-google-maps/src/components/marker'
-  // Vue.component('GmapMarker', GmapMarker)
-  // then disable the following:
-  // installComponents: true,
 })
 
 Vue.config.productionTip = false

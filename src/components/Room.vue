@@ -6,10 +6,10 @@
     </table>
     <div id="app1">
       <v-client-table :columns="columns" :data="rooms" :options="options">
-        <v-btn flat icon color="deep-orange" slot="upvote" slot-scope="props" @click="upvote(props.row.roomNum)">
+        <v-btn flat icon color="deep-orange" slot="upvote" slot-scope="props" @click="upvote(props.row.roomID)">
           <v-icon>thumb_up</v-icon>
         </v-btn>
-        <v-btn flat icon color="indigo" slot="remove" slot-scope="props" @click="deleteRoom(props.row.roomNum)">
+        <v-btn flat icon color="indigo" slot="remove" slot-scope="props" @click="deleteRoom(props.row.roomID)">
           <v-icon>delete</v-icon>
         </v-btn>
       </v-client-table>
@@ -67,16 +67,16 @@ export default {
       props: ['rooms'],
       errors: [],
       childDataLoaded: false,
-      columns: ['roomNum', 'roomType', 'price', 'isEmpty', 'upvotes', 'upvote', 'remove'],
+      columns: ['roomID', 'roomType', 'price', 'isEmpty', 'upvotes', 'upvote', 'remove'],
       options: {
         perPage: 10,
-        filterable: ['roomNum', 'roomType', 'price'],
+        filterable: ['roomID', 'roomType', 'price'],
         sortable: ['upvotes'],
         headings: {
-          roomNum: 'roomNum',
+          roomID: 'Room Number',
           roomType: 'Type',
-          price: 'price',
-          isEmpty: 'status',
+          price: 'Price',
+          isEmpty: 'is Empty',
           upvotes: 'Upvotes'
         }
       }
@@ -103,8 +103,8 @@ export default {
           console.log(error)
         })
     },
-    upvote: function (roomNum) {
-      RoomService.upvoteRoom(roomNum)
+    upvote: function (roomID) {
+      RoomService.upvoteRoom(roomID)
         .then(response => {
           // JSON responses are automatically parsed.
           this.loadRooms()
@@ -115,7 +115,7 @@ export default {
           console.log(error)
         })
     },
-    deleteRoom: function (roomNum) {
+    deleteRoom: function (roomID) {
       this.$swal({
         title: 'Are you totally sure:',
         text: 'You can\'t Undo this action',
@@ -132,7 +132,7 @@ export default {
           this.user_role = sessionStorage.getItem('role')
           if (this.user_role === 'admin') {
             console.log(this.user)
-            RoomService.deleteRoom(this.user, roomNum)
+            RoomService.deleteRoom(this.user, roomID)
               .then(response => {
                 this.message = response.data
                 console.log(this.message)

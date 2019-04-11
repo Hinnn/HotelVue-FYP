@@ -28,18 +28,6 @@ export default {
     return {
       bookings: [],
       props: ['booking'],
-      // props: {
-      //   _id: String,
-      //   email: String,
-      //   name: String,
-      //   contactNum: Number,
-      //   amount: Number,
-      //   // payment_status: Boolean,
-      //   roomType: String,
-      //   roomNum: String,
-      //   checkin_date: Date,
-      //   leave_date: Date
-      // },
       errors: [],
       childDataLoaded: false,
       columns: ['_id', 'email', 'name', 'contactNum', 'amount', 'roomType', 'roomNum', 'checkin_date', 'leave_date', 'payment_status', 'edit', 'remove'],
@@ -53,7 +41,7 @@ export default {
           contactNum: 'Contact Phone',
           amount: 'Amount',
           roomType: 'Room Type',
-          roomNum: 'Room Number',
+          roomID: 'Room Number',
           checkin_date: 'Check in Date',
           leave_date: 'Leave Date',
           payment_status: 'Payment Status'

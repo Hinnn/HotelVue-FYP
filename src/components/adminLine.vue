@@ -4,9 +4,6 @@
     <v-container fluid>
       <v-layout row>
         <v-flex xs12 sm6>
-          <v-btn class="ml-0 hidden-sm-and-down" flat @click="addRoom">
-            add rooms
-          </v-btn>
           <v-btn class="ml-0 hidden-sm-and-down" flat @click="reserve">
             Reserve
           </v-btn>
@@ -25,6 +22,9 @@
           <v-btn class="ml-0 hidden-sm-and-down" flat @click="customerList">
             Customer List
           </v-btn>
+          <v-btn class="ml-0 hidden-sm-and-down" flat @click="roomList">
+            Room List
+          </v-btn>
         </v-flex>
       </v-layout>
     </v-container>
@@ -35,9 +35,6 @@
 export default {
   name: 'adminLine',
   methods: {
-    addRoom () {
-      this.$router.push('/addRoom')
-    },
     reserve () {
       this.$router.push('/Book')
     },
@@ -55,6 +52,9 @@ export default {
     },
     customerList () {
       this.$router.push('/customerList')
+    },
+    roomList () {
+      this.$router.push('/RoomList')
     }
   }
 }

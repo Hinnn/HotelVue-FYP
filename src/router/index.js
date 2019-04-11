@@ -15,12 +15,13 @@ import AccountInfo from '@/components/AccountInfo'
 import customerSearch from '@/components/customerSearch'
 import changePassword from '@/components/changePassword'
 import adminHome from '@/components/adminHome'
-// import addRoom from '@/components/addRoom'
+import addRoom from '@/components/addRoom'
 import editOrder from '@/components/editOrder'
 import AdminInfo from '@/components/AdminInfo'
 import manageBooking from '@/components/manageBooking'
 import customerList from '@/components/customerList'
 import book from '@/components/book'
+import RoomList from '@/components/RoomList'
 Vue.use(Router)
 
 export default new Router({
@@ -100,11 +101,11 @@ export default new Router({
       name: 'manageBooking',
       component: manageBooking
     },
-    // {
-    //   path: '/addRoom',
-    //   name: 'addRoom',
-    //   component: addRoom
-    // },
+    {
+      path: '/addRoom',
+      name: 'addRoom',
+      component: addRoom
+    },
     {
       path: '/editOrder',
       name: 'editOrder',
@@ -124,6 +125,11 @@ export default new Router({
       path: '/book',
       name: 'book',
       component: book
+    },
+    {
+      path: '/RoomList',
+      name: 'RoomList',
+      component: RoomList
     }
   ]
 })

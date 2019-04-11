@@ -15,14 +15,14 @@ export default {
   Logout () {
     return Api().post('/admin/logout')
   },
-  changePass (user, one) {
+  changePass (user, one, token) {
     return Api().put(`/admin/changePassword/${user}`, one,
-      { headers: {'Content-type': 'application/json'} })
+      { headers: {'Content-type': 'application/json', 'token': token} })
   },
   forgetPass (user) {
     return Api().post(`/admin/forgetPassword`, user)
   },
-  fetchAdmin (email) {
-    return Api().get(`/admin/${email}`)
+  fetchAdmin (user) {
+    return Api().get(`/admin/${user}`)
   }
 }

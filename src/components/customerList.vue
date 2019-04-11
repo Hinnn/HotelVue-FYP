@@ -56,9 +56,11 @@ export default {
       this.email = sessionStorage.getItem('email')
       this.id = sessionStorage.getItem('id')
       this.user_role = sessionStorage.getItem('role')
+      var token = sessionStorage.getItem('token')
+      console.log(token)
       if (this.user_role === 'admin') {
-        console.log(this.email)
-        CustomerService.fetchCustomers(this.email)
+        // console.log(this.email)
+        CustomerService.fetchCustomers(this.email, token)
           .then(response => {
           // JSON responses are automatically parsed.
             this.customers = response.data
@@ -101,7 +103,8 @@ export default {
           this.user_role = sessionStorage.getItem('role')
           if (this.user_role === 'admin') {
             console.log(this.user)
-            CustomerService.deleteCustomer(this.user, email)
+            let token = sessionStorage.getItem('token')
+            CustomerService.deleteCustomer(this.user, email, token)
               .then(response => {
                 // JSON responses are automatically parsed.
                 // console.log(email)

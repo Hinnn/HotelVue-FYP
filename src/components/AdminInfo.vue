@@ -53,7 +53,7 @@ export default {
   methods: {
     getUser () {
       this.userEmail = sessionStorage.getItem('email')
-      // this.token = sessionStorage.getItem('token')
+      this.token = sessionStorage.getItem('token')
       this.user_role = sessionStorage.getItem('role')
       this.id = sessionStorage.getItem('id')
       if (this.user_role === 'admin') {
@@ -67,8 +67,10 @@ export default {
             this.user = response.data
             console.log('Getting user: ' + JSON.stringify(this.user, null, 5))
             this.userId = this.id
+            // console.log(this.user[0])
+            // console.log(this.user[0].email)
             this.userName = this.user[0].name
-            // this.email = this.user.email
+            this.email = this.user[0].email
             this.registerDate = this.user[0].register_date
           })
       }
