@@ -66,20 +66,20 @@ export default {
       password2: null,
       show1: false,
       show2: false,
-      message: '',
+      message: ''
       // emailRules: [
       //   v => !!v || 'E-mail is required',
       //   v => /.+@.+/.test(v) || 'E-mail must be valid'
       // ],
-      passwordRules: [
-        v => !!v || 'Password is required!',
-        v => /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W])[a-zA-Z\d\W?$]{8,16}/.test(v) || 'Password must has number,special character, lowercase and capital Letters!'
-      ],
-      password2Rules: [
-        v => !!v || 'Password is required!',
-        v => /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W])[a-zA-Z\d\W?$]{8,16}/.test(v) || 'Password must has number,special character, lowercase and capital Letters!',
-        v => !!v.password || 'Must be same as Password'
-      ]
+      // passwordRules: [
+      //   v => !!v || 'Password is required!',
+      //   v => /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W])[a-zA-Z\d\W?$]{8,16}/.test(v) || 'Password must has number,special character, lowercase and capital Letters!'
+      // ],
+      // password2Rules: [
+      //   v => !!v || 'Password is required!',
+      //   v => /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W])[a-zA-Z\d\W?$]{8,16}/.test(v) || 'Password must has number,special character, lowercase and capital Letters!',
+      //   v => !!v.password || 'Must be same as Password'
+      // ]
     }
   },
   components: {
@@ -114,7 +114,8 @@ export default {
       }
       console.log(updateOne)
       // this.user.Gender = this.Gender
-      CustomerService.changePass(this.userEmail, updateOne)
+      let token = sessionStorage.getItem('token')
+      CustomerService.changePass(this.userEmail, updateOne, token)
         .then(response => {
           // this.user = response.data
           // console.log(this.user)

@@ -93,7 +93,8 @@ export default {
       }
       console.log(updateOne)
       // this.user.Gender = this.Gender
-      CustomerSer.EditInfo(this.userEmail, updateOne)
+      let token = sessionStorage.getItem('token')
+      CustomerSer.EditInfo(this.userEmail, updateOne, token)
         .then(response => {
           // this.user = response.data
           // console.log(this.user)

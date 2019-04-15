@@ -1,4 +1,3 @@
-
 <template>
   <base-card dark>
     <v-img class="white--text" height="30%" width="100%"

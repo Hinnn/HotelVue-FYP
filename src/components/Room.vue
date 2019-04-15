@@ -16,41 +16,6 @@
     </div>
   </div>
 </template>
-<!--<template>-->
-  <!--<div id="roomCard">-->
-  <!--<v-layout>-->
-  <!--<v-flex xs12 sm6 offset-sm3>-->
-    <!--<v-card>-->
-      <!--<v-container v-bind="{ [`grid-list-${size}`]: true }" fluid>-->
-        <!--<v-layout row>-->
-          <!--<v-flex :key=1 xs4>-->
-            <!--<v-card flat tile>-->
-              <!--<v-img src="/static/images/003.jpg" height="150px"></v-img>-->
-            <!--</v-card>-->
-          <!--</v-flex>-->
-        <!--</v-layout>-->
-        <!--<v-spacer></v-spacer>-->
-        <!--<v-layout row>-->
-          <!--<v-flex :key=1 xs4>-->
-            <!--<v-card flat tile>-->
-              <!--<v-img src="/static/images/004.jpg" height="150px"></v-img>-->
-            <!--</v-card>-->
-          <!--</v-flex>-->
-        <!--</v-layout>-->
-        <!--<v-spacer></v-spacer>-->
-        <!--<v-layout row>-->
-          <!--<v-flex :key=1 xs4>-->
-            <!--<v-card flat tile>-->
-              <!--<v-img src="/static/images/005.jpg" height="150px"></v-img>-->
-            <!--</v-card>-->
-          <!--</v-flex>-->
-        <!--</v-layout>-->
-      <!--</v-container>-->
-    <!--</v-card>-->
-  <!--</v-flex>-->
-  <!--</v-layout>-->
-  <!--</div>-->
-<!--</template>-->
 <script>
 import RoomService from '@/services/roomservice'
 import Vue from 'vue'
@@ -67,16 +32,18 @@ export default {
       props: ['rooms'],
       errors: [],
       childDataLoaded: false,
-      columns: ['roomID', 'roomType', 'price', 'isEmpty', 'upvotes', 'upvote', 'remove'],
+      columns: ['roomID', 'roomType', 'price', 'status', 'bedType', 'people', 'upvotes', 'upvote', 'remove'],
       options: {
         perPage: 10,
-        filterable: ['roomID', 'roomType', 'price'],
+        filterable: ['roomID', 'roomType', 'price', 'bedType'],
         sortable: ['upvotes'],
         headings: {
           roomID: 'Room Number',
           roomType: 'Type',
           price: 'Price',
-          isEmpty: 'is Empty',
+          status: 'status',
+          bedType: 'beds',
+          people: 'people',
           upvotes: 'Upvotes'
         }
       }

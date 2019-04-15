@@ -2,7 +2,7 @@
   <div class="hero">
     <adminLine />
     <h3 class="vue-title"><i class="fa fa-list" style="padding: 3px"></i>Orders</h3>
-    <v-text id="app1">
+    <v-text id="table">
       <v-client-table :columns="columns" :data="bookings" :options="options">
         <!--<v-text>Check in Date: {{props.row.checkin_date|moment}} </v-text>-->
         <v-btn flat icon color="indigo" slot="edit" slot-scope="props" @click="editBooking(props.row._id)">
@@ -30,7 +30,7 @@ export default {
       props: ['booking'],
       errors: [],
       childDataLoaded: false,
-      columns: ['_id', 'email', 'name', 'contactNum', 'amount', 'roomType', 'roomNum', 'checkin_date', 'leave_date', 'payment_status', 'edit', 'remove'],
+      columns: ['_id', 'email', 'name', 'contactNum', 'amount', 'roomType', 'roomID', 'checkin_date', 'leave_date', 'payment_status', 'edit', 'remove'],
       options: {
         perPage: 10,
         filterable: ['roomType', 'email', 'checkin_date', 'leave_date', 'name', 'payment_status'],
@@ -60,12 +60,13 @@ export default {
   },
   methods: {
     loadBookings: function () {
-      // this.email = sessionStorage.getItem('email')
+      let user = sessionStorage.getItem('email')
+      let token = sessionStorage.getItem('token')
       // this.id = sessionStorage.getItem('id')
       // this.user_role = sessionStorage.getItem('role')
       // if (this.user_role === 'admin') {
       // console.log(this.id)
-      BookingSer.fetchBookings()
+      BookingSer.fetchAllBookings(user, token)
         .then(response => {
           // JSON responses are automatically parsed.
           this.bookings = response.data
@@ -125,7 +126,7 @@ export default {
 </script>
 
 <style scoped>
-  #app1 {
+  #table {
     width: 80%;
     margin: 0 auto;
   }

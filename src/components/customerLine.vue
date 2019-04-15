@@ -19,6 +19,9 @@
           <v-btn class="ml-0 hidden-sm-and-down" flat @click="changePass">
             Change password
           </v-btn>
+          <v-btn class="ml-0 hidden-sm-and-down" flat @click="roomwithimage">
+            Room
+          </v-btn>
         </v-flex>
       </v-layout>
     </v-container>
@@ -43,6 +46,9 @@ export default {
     },
     changePass () {
       this.$router.push('/changePassword')
+    },
+    roomwithimage () {
+      this.$router.push('/roomImage')
     }
   }
 }

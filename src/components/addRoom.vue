@@ -32,7 +32,8 @@ export default {
     addRoom: function (room) {
       console.log(sessionStorage.getItem('token'))
       let user = sessionStorage.getItem('email')
-      RoomService.addRoom(user, room).then(response => {
+      let token = sessionStorage.getItem('token')
+      RoomService.addRoom(user, room, token).then(response => {
         console.log(response)
         this.message = response.data.message
         this.$router.push({path: '/'})

@@ -4,6 +4,9 @@
     <h3 class="vue-title"><i class="fa fa-list" style="padding: 3px"></i>Rooms</h3>
       <v-client-table :columns="columns" :data="rooms" :options="options">
         <!--<v-text>Check in Date: {{props.row.checkin_date|moment}} </v-text>-->
+        <!--<v-avatar :size="40">-->
+          <!--<img :src="props.row.roomImage.path[0]" v-if="props.row.roomImage !== null">-->
+        <!--</v-avatar>-->
         <v-btn flat icon color="indigo" slot="edit" slot-scope="props" @click="editRoom(props.row.roomID)">
           <v-icon>edit</v-icon>
         </v-btn>
@@ -31,7 +34,7 @@ export default {
       props: ['room'],
       errors: [],
       childDataLoaded: false,
-      columns: ['roomType', 'roomID', 'price', 'people', 'isEmpty', 'edit', 'remove'],
+      columns: ['roomType', 'roomID', 'price', 'people', 'bedType', 'roomImage', 'edit', 'remove'],
       options: {
         perPage: 10,
         filterable: ['roomType', 'price', 'isEmpty'],
@@ -40,9 +43,12 @@ export default {
           roomID: 'Room Number',
           price: 'Price',
           people: 'Amount of people',
-          isEmpty: 'Is empty'
+          bedType: 'beds',
+          roomImage: 'Image'
         }
-      }
+      },
+      imgURL: '',
+      isShowData: false
     }
   },
   components: {
@@ -62,6 +68,7 @@ export default {
           // JSON responses are automatically parsed.
           this.rooms = response.data
           console.log(this.rooms)
+          this.isShowData = true
         })
         .catch(error => {
           this.errors.push(error)

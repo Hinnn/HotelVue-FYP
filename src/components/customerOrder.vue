@@ -63,11 +63,13 @@ export default {
   methods: {
     getBooking () {
       this.user_role = sessionStorage.getItem('role')
-      this.userEmail = sessionStorage.getItem('email')
+      let user = sessionStorage.getItem('email')
       if (this.user_role === 'customer') {
         console.log(this.user_role)
-        console.log(this.userEmail)
-        BookingService.fetchBooking(this.userEmail)
+        console.log(user)
+        let token = sessionStorage.getItem('token')
+        console.log(token)
+        BookingService.fetchBookings(user, token)
           .then(response => {
             this.booking = response.data
             console.log('Getting Booking: ' + JSON.stringify(this.booking, null, 5))

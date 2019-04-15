@@ -11,7 +11,7 @@
             <!--prepend-icon="phone" :rules="phoneRules"-->
           <!--&gt;</v-text-field>-->
     <v-select v-model="roomID"
-      :items="items" label="Room Number" prepend-icon="local_hotel"
+      :items="items" label="Room Number" prepend-icon="local_hotel" attach chips multiple
     ></v-select>
             <!--<v-text-field-->
               <!--v-model="roomID" :counter="10" label="Room Number"-->
@@ -41,7 +41,7 @@ export default {
       childDataLoaded: false,
       // contactNum: '',
       roomID: '',
-      items: ['101', '102', '103'],
+      items: ['101', '102', '103', '104', '105'],
       id: ''
       // phoneRules: [
       //   v => (v && v.length <= 10) || 'Phone number must be 10 characters'

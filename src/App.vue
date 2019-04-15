@@ -1,5 +1,4 @@
-<!--<template xmlns:v-slot="http://www.w3.org/1999/XSL/Transform">-->
-<template>
+<template xmlns:v-slot="http://www.w3.org/1999/XSL/Transform">
   <div id="app">
     <v-app>
     <b-navbar toggleable="md">
@@ -15,28 +14,22 @@
           <!--<b-nav-item to="/"><i class="fa fa-home" style="padding: 5px"> HOME</i></b-nav-item>-->
           <b-nav-item to="/customerHome"><i class="fa fa-money" style="padding: 5px"> Customer</i></b-nav-item>
           <b-nav-item to="/adminHome"><i class="fa fa-money" style="padding: 5px"> Admin</i></b-nav-item>
+          <!--<b-nav-item to="/TypeList"><i class="fa fa-money" style="padding: 5px"> TypeList</i></b-nav-item>-->
         </b-navbar-nav>
         <b-navbar-nav class="ml-auto">
           <div><v-btn to="/SignUp" flat large class="fa fa-info" style="padding: 5px">SIGN UP</v-btn></div>
           <div><v-btn to="/Login" flat large class="fa fa-info" style="padding: 5px">LOGIN</v-btn></div>
           <div><v-btn to="/Logout" flat large class="fa fa-info" style="padding: 5px">LOGOUT</v-btn></div>
           <v-btn fab small icon > <v-icon color="primary" @click="showAccount">account_circle</v-icon></v-btn>
-          <!--<div class="text-xs-center">-->
-          <!--<v-menu offset-y>-->
-            <!--<template>-->
-              <!--<v-btn fab small icon> <v-icon color="primary">account_circle</v-icon></v-btn>-->
-            <!--</template>-->
-            <!--<v-list>-->
-              <!--<v-list-tile>-->
-                <!--<v-list-tile-title>{{items.title1}}</v-list-tile-title>-->
-              <!--</v-list-tile>-->
-              <!--<v-list-tile @click="showAccount">-->
-                <!--<v-list-tile-title>{{items.title2}</v-list-tile-title>-->
-              <!--</v-list-tile>-->
-            <!--</v-list>-->
-          <!--</v-menu>-->
+          <!--<div>-->
+          <!--<v-chip color="white" text-color="black" outline>-->
+            <!--<v-avatar @click="showAccount">-->
+              <!--<v-icon>account_circle</v-icon>-->
+            <!--</v-avatar>-->
+            <!--{{this.name}}-->
+          <!--</v-chip>-->
           <!--</div>-->
-            <!--<b-nav-item to="/SignUp"><i class="fa fa-info" style="padding: 5px"> SIGN UP </i></b-nav-item>-->
+          <!--&lt;!&ndash;<b-nav-item to="/SignUp"><i class="fa fa-info" style="padding: 5px"> SIGN UP </i></b-nav-item>&ndash;&gt;-->
           <!--<b-nav-item to="/Login"><i class="fa fa-info" style="padding: 5px"> LOGIN </i></b-nav-item>-->
           <!--<b-nav-item to="/Logout"><i class="fa fa-info" style="padding: 5px"> LOGOUT</i></b-nav-item>-->
           <i class="fa fa-pied-piper-alt fa-1x" style="padding: 5px; color: white;"></i>
@@ -55,21 +48,15 @@ export default {
     // CoreCta: () => import('@/components/core/Cta'),
     // CoreDrawer: () => import('@/components/core/Drawer'),
     // CoreFooter: () => import('@/components/core/Footer'),
-    CoreToolbar: () => import('@/components/Toolbar')
+    // CoreToolbar: () => import('@/components/Toolbar')
     // CoreView: () => import('@/components/core/View')
   },
   data () {
     return {
-    //
+      message: '',
+      name: ''
     }
   },
-  // data: () => ({
-  //   items: [
-  //     { title2: 'Account' },
-  //     { title1: sessionStorage.getItem('name') }
-  //   ],
-  //   name: ''
-  // }),
   methods: {
     showAccount () {
       this.user_role = sessionStorage.getItem('role')
