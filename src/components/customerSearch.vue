@@ -54,36 +54,102 @@
                     </div>
                   </v-flex>
                 </v-layout>
-                <!--<v-divider></v-divider>-->
-                <!--<v-flex  xs12 sm6 md3>-->
-                <!--<v-card-text><h5>{{message}} Day(s)</h5></v-card-text>-->
-                <!--</v-flex>-->
-                <!--</div>-->
-                <!--<v-divider></v-divider>-->
-                <!--<v-text id="roomTypeTable">-->
-                <v-client-table :columns="columns" :data="type" :options="options">
-                  <v-btn flat icon color="indigo" slot="reserve" slot-scope="props" @click="reserveRoom(props.row.roomType)">
-                    Reserve
-                  </v-btn>
-                </v-client-table>
-                <!--</v-text>-->
-                <!--<v-list dense>-->
-                  <!--<v-list-tile>-->
-                    <!--<v-list-tile-content>double:</v-list-tile-content>-->
-                    <!--&lt;!&ndash;<v-list-tile-content class="align-end">{{ double }}</v-list-tile-content>&ndash;&gt;-->
-                  <!--</v-list-tile>-->
-                <!--</v-list>-->
+                <v-layout>
+                  <v-flex>
+                  <v-client-table :columns="columns" :data="type" :options="options">
+                    <v-btn flat icon color="indigo" slot="reserve" slot-scope="props" @click="dialog = true">
+                      Reserve
+                    </v-btn>
+                  </v-client-table>
+                  <v-dialog v-model="dialog" fullscreen hide-overlay transition="dialog-bottom-transition" scrollable>
+                    <v-card tile>
+                      <v-toolbar card dark color="primary">
+                        <v-btn icon dark @click="dialog = false">
+                          <v-icon>close</v-icon>
+                        </v-btn>
+                        <v-toolbar-title>Book Your Room</v-toolbar-title>
+                        <v-spacer></v-spacer>
+                        <v-toolbar-items>
+                          <v-btn dark flat @click="reserveRoom" :disabled="submitStatus === 'PENDING'">Reserve</v-btn>
+                        </v-toolbar-items>
+                      </v-toolbar>
+                      <v-card-text>
+                        <v-text-field
+                          ref="name" v-model="name" :rules="[() => !!name || 'This field is required']"
+                          label="Name (people who will check in)"
+                          required prepend-icon="person" class="form__input">
+                        </v-text-field>
+                        <v-text-field
+                          v-model="email"
+                          :rules="emailRules"
+                          label="Email"
+                          required
+                          prepend-icon="email"
+                          class="form__input"
+                        ></v-text-field>
+                        <v-text-field
+                          class="form-group"
+                          v-model="contactNum" :counter="10" label="Contact Number"
+                          prepend-icon="phone" :rules="phoneRules"
+                        ></v-text-field>
+                        <!--<div id = "checkin_date">-->
+                          <v-menu
+                            v-model="menu1" :close-on-content-click="false" :nudge-right="40"
+                            lazy transition="scale-transition" offset-y full-width>
+                            <template slot="activator">
+                              <v-text-field v-model="checkin_date" label="Check In Date" prepend-icon="event" readonly required>
+                              </v-text-field>
+                            </template>
+                            <!--<v-date-picker v-model="checkin_date" @on-change="startTimeChange" @input="menu1 = false"></v-date-picker>-->
+                          </v-menu>
+                        <!--</div>-->
+                        <!--<div id = "leave_date">-->
+                          <v-menu
+                            v-model="menu2" :close-on-content-click="false" :nudge-right="40"
+                            lazy transition="scale-transition" offset-y full-width>
+                            <template slot="activator">
+                              <v-text-field v-model="leave_date" label="Check Out Date" prepend-icon="event" readonly required>
+                              </v-text-field>
+                            </template>
+                            <!--<v-date-picker v-model="leave_date" @on-change="endTimeChange" @input="menu2 = false"></v-date-picker>-->
+                          </v-menu>
+                        <!--</div>-->
+                        <!--<div id = "roomType">-->
+                        <v-select v-model="roomType"
+                                  :items="items" label="Room Type" prepend-icon="hotel"
+                        ></v-select>
+                        <!--</div>-->
+                        <!--<div id = "amount">-->
+                        <v-select v-model="amount"
+                                  :items="items1" label="Amount" prepend-icon="plus_one"
+                        ></v-select>
+                      </v-card-text>
+                      <v-card-text>
+                        <p class="typo__p red--text" v-if="submitStatus === 'ERROR'">Please input all the fields correctly.</p>
+                        <p class="typo__p red--text" v-if="isReserved === 'NO'">{{message}}</p>
+                        <p class="typo__p green--text" v-if="isReserved === 'YES'">{{message}}</p>
+                        <p class="typo__p orange--text" v-if="submitStatus === 'PENDING'"> Please waiting...</p>
+                      </v-card-text>
+                      <v-divider class="mt-5"></v-divider>
+                    </v-card>
+                    <!--<v-card ref="form" id="addBookingCard">-->
+                      <!--<v-card-title class="display-1 pl-5 pt-5">Reserve a room</v-card-title>-->
+                      <!--<booking-form :booking="booking" @booking-is-created-updated="submitBooking"></booking-form>-->
+                    <!--</v-card>-->
+                  </v-dialog>
+                  </v-flex>
+                </v-layout>
               </v-card>
             </v-flex>
           </v-layout>
         </v-container>
       </div>
-    <!--</v-img>-->
-  <!--</base-card>-->
   </div>
 </template>
 <script>
 import RoomTypeService from '@/services/roomTypeservice'
+import BookingForm from '@/components/add-order-form'
+import BookingService from '@/services/bookingservices'
 import Vue from 'vue'
 import VueTables from 'vue-tables-2'
 
@@ -93,6 +159,10 @@ export default {
   name: 'customerSearch',
   data () {
     return {
+      dialog: false,
+      notifications: false,
+      sound: true,
+      widgets: false,
       type: [],
       props: ['type'],
       columns: ['roomType', 'bedType', 'people', 'price', 'reserve'],
@@ -115,20 +185,44 @@ export default {
       leave_date: '', // 结束日期
       roomType: '',
       days: '',
-      message: ''
+      amount: '',
+      name: '',
+      email: '',
+      contactNum: '',
+      submitStatus: null,
+      isReserved: null,
+      errorMessages: '',
+      message: '',
+      items1: ['1', '2', '3'],
+      phoneRules: [
+        v => (v && v.length <= 10) || 'Phone number must be 10 characters'
+      ],
+      emailRules: [
+        v => !!v || 'Email is required',
+        v => /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(\.[a-zA-Z0-9_-])+/.test(v) || 'Email must be valid'
+      ]
     }
   },
   components: {
-
+    'booking-form': BookingForm,
     customerLine: () => import('@/components/customerLine')
   },
   computed: {
     form () {
       return {
+        name: this.name,
+        email: this.email,
+        amount: this.amount,
+        contactNum: this.contactNum,
         checkin_date: this.checkin_date,
         leave_date: this.leave_date,
         roomType: this.roomType
       }
+    }
+  },
+  watch: {
+    name () {
+      this.errorMessages = ''
     }
   },
   methods: {
@@ -150,7 +244,7 @@ export default {
         }
       }
     },
-    reserveRoom: function (roomType) {
+    reserveRoom: function () {
       let dateBegin = new Date(this.checkin_date)
       // console.log(dateBegin)
       let dateEnd = new Date(this.leave_date)
@@ -158,12 +252,39 @@ export default {
       let days = Math.floor(dateDiff / (24 * 3600 * 1000))
       console.log(days)
       this.days = days
-      sessionStorage.setItem('days', this.days)
-      sessionStorage.setItem('checkin_date', this.checkin_date)
-      sessionStorage.setItem('leave_date', this.leave_date)
-      roomType = this.roomType
-      console.log(roomType)
-      sessionStorage.getItem('roomType', this.roomType)
+      // sessionStorage.setItem('days', this.days)
+      // sessionStorage.setItem('checkin_date', this.checkin_date)
+      // sessionStorage.setItem('leave_date', this.leave_date)
+      // roomType = this.roomType
+      // console.log(roomType)
+      // sessionStorage.getItem('roomType', this.roomType)
+      this.formErrors = false
+      Object.keys(this.form).forEach(f => {
+        if (!this.form[f]) this.formErrors = true
+      })
+      if (this.formErrors === false) {
+        var booking = {
+          name: this.name,
+          email: this.email,
+          checkin_date: this.checkin_date,
+          leave_date: this.leave_date,
+          amount: this.amount,
+          roomType: this.roomType,
+          contactNum: this.contactNum
+        }
+        this.booking = booking
+        console.log('Submitting in BookingForm : ' +
+          JSON.stringify(this.booking, null, 5))
+        this.$emit('booking-is-created-updated', this.booking)
+        BookingService.addBooking(booking)
+          .then(response => {
+            console.log(response)
+            this.$router.push('/customerOrder')
+          })
+          .catch(error => {
+            console.log(error)
+          })
+      }
     },
     submit () {
       // let dateBegin = new Date(this.checkin_date)

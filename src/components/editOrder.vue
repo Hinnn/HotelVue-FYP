@@ -6,17 +6,9 @@
         <v-card ref="form" id="editOrderCard" lazy-validation>
           <v-card-title class="display-1 pl-5 pt-5">Edit Order</v-card-title>
           <v-card-text>
-            <!--<v-text-field-->
-            <!--v-model="contactNum" :counter="10" label="Contact Number"-->
-            <!--prepend-icon="phone" :rules="phoneRules"-->
-          <!--&gt;</v-text-field>-->
     <v-select v-model="roomID"
-      :items="items" label="Room Number" prepend-icon="local_hotel" attach chips multiple
+      :items="items" label="Room Number" prepend-icon="local_hotel" attach chips multiple="amount"
     ></v-select>
-            <!--<v-text-field-->
-              <!--v-model="roomID" :counter="10" label="Room Number"-->
-              <!--prepend-icon="local_hotel" :rules="phoneRules"-->
-            <!--&gt;</v-text-field>-->
           </v-card-text>
           <v-card-actions>
             <v-btn flat large @click="editBooking">Submit</v-btn>
@@ -41,38 +33,29 @@ export default {
       childDataLoaded: false,
       // contactNum: '',
       roomID: '',
+      checkin_date: '',
+      leave_date: '',
+      amount: '',
       items: ['101', '102', '103', '104', '105'],
       id: ''
-      // phoneRules: [
-      //   v => (v && v.length <= 10) || 'Phone number must be 10 characters'
-      // ]
     }
   },
   components: {
-
     adminLine: () => import('@/components/adminLine')
   },
-  // // Fetches Bookings when the component is created.
-  // created () {
-  //   this.getBooking()
-  // },
   methods: {
     clear () {
       this.$v.$reset()
-      // this.contactNum = ''
       this.roomID = ''
     },
-    // getBooking: function () {
-    //   BookingSer.fetchOneBooking(this.$router.params).then(response => {
-    //     this.booking = response.data.data
-    //     this.childDataLoaded = true
-    //     console.log(this.booking)
-    //   })
-    //     .catch(error => {
-    //       this.errors.push(error)
-    //       console.log(error)
-    //     })
-    // },
+    getRoomID () {
+      let amount = this.$router.amount
+      console.log(amount)
+      // let checkin_date = this.$router.checkin_date
+      // console.log(checkin_date)
+      // let leave_date = this.$router.leave_date
+      // console.log(leave_date)
+    },
     editBooking () {
       let id = this.$router.params
       console.log(id)

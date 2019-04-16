@@ -1,26 +1,34 @@
-<template xmlns:v-slot="http://www.w3.org/1999/XSL/Transform">
+<template>
   <div id="app">
     <v-app>
     <b-navbar toggleable="md">
       <b-navbar-toggle target="nav_collapse"></b-navbar-toggle>
-      <!--<img src="./assets/007.jpg"  width = "50" height = "47" class="img-circle" style="padding: 5px">-->
-      <!--<template slot=activator>-->
         <v-icon color="primary" dark >home</v-icon>
-      <!--</template>-->
       <b-navbar-brand to="/">YourHotel</b-navbar-brand>
       <b-collapse is-nav id="nav_collapse">
         <b-navbar-nav>
           <div><v-btn to="/" flat large class="fa fa-home" style="padding: 5px">HOME</v-btn></div>
-          <!--<b-nav-item to="/"><i class="fa fa-home" style="padding: 5px"> HOME</i></b-nav-item>-->
           <b-nav-item to="/customerHome"><i class="fa fa-money" style="padding: 5px"> Customer</i></b-nav-item>
           <b-nav-item to="/adminHome"><i class="fa fa-money" style="padding: 5px"> Admin</i></b-nav-item>
-          <!--<b-nav-item to="/TypeList"><i class="fa fa-money" style="padding: 5px"> TypeList</i></b-nav-item>-->
         </b-navbar-nav>
         <b-navbar-nav class="ml-auto">
           <div><v-btn to="/SignUp" flat large class="fa fa-info" style="padding: 5px">SIGN UP</v-btn></div>
           <div><v-btn to="/Login" flat large class="fa fa-info" style="padding: 5px">LOGIN</v-btn></div>
           <div><v-btn to="/Logout" flat large class="fa fa-info" style="padding: 5px">LOGOUT</v-btn></div>
+          <!--<v-menu>-->
           <v-btn fab small icon > <v-icon color="primary" @click="showAccount">account_circle</v-icon></v-btn>
+            <!--<template v-slot:activator="{ on }">-->
+              <!--<v-btn>A Menu</v-btn>-->
+            <!--</template>-->
+            <!--<v-list>-->
+              <!--<v-list-tile @click="showAccount">-->
+                <!--<v-list-tile-title>Account</v-list-tile-title>-->
+              <!--</v-list-tile>-->
+              <!--<v-list-tile @click="showAccount">-->
+                <!--<v-list-tile-title>Show Account</v-list-tile-title>-->
+              <!--</v-list-tile>-->
+            <!--</v-list>-->
+          <!--</v-menu>-->
           <!--<div>-->
           <!--<v-chip color="white" text-color="black" outline>-->
             <!--<v-avatar @click="showAccount">-->

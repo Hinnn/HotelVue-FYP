@@ -89,13 +89,8 @@ export default {
   // props: ['booking'],
   data () {
     return {
-      // name: this.name,
-      // email: this.email,
       roomType: '',
       amount: '',
-      // contactNum: this.contactNum,
-      // checkin_date: this.checkin_date,
-      // leave_date: this.leave_date,
       name: '',
       email: '',
       contactNum: '',

@@ -15,6 +15,7 @@
 <script>
 import BookingService from '@/services/bookingservices'
 import BookingForm from '@/components/add-order-form'
+// import BookingForm from '@/components/customerSearch'
 export default {
   data () {
     return {
