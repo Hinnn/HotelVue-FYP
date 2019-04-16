@@ -56,8 +56,11 @@
                 </v-layout>
                 <v-layout>
                   <v-flex>
-                  <v-client-table :columns="columns" :data="type" :options="options">
-                    <v-btn flat icon color="indigo" slot="reserve" slot-scope="props" @click="dialog = true">
+                  <v-client-table :columns="columns" :data="type, availableAmount" :options="options">
+                    <v-btn flat icon color="indigo" slot="Available" slot-scope="props" @click="getAvailableAmount">
+                      {{availableAmount}} Rooms Left
+                    </v-btn>
+                    <v-btn outline color="indigo" slot="Reserve" slot-scope="props" @click="dialog = true" :disabled="submitStatus === 'PENDING'|| availableAmount <= 0">
                       Reserve
                     </v-btn>
                   </v-client-table>
@@ -70,27 +73,18 @@
                         <v-toolbar-title>Book Your Room</v-toolbar-title>
                         <v-spacer></v-spacer>
                         <v-toolbar-items>
-                          <v-btn dark flat @click="reserveRoom" :disabled="submitStatus === 'PENDING'">Reserve</v-btn>
+                          <v-btn dark flat @click="reserveRoom" :disabled="submitStatus === 'PENDING'|| availableAmount <= 0">Reserve</v-btn>
                         </v-toolbar-items>
                       </v-toolbar>
                       <v-card-text>
                         <v-text-field
-                          ref="name" v-model="name" :rules="[() => !!name || 'This field is required']"
-                          label="Name (people who will check in)"
+                          ref="name" v-model="name" :rules="[() => !!name || 'This field is required']" label="Name (people who will check in)"
                           required prepend-icon="person" class="form__input">
                         </v-text-field>
-                        <v-text-field
-                          v-model="email"
-                          :rules="emailRules"
-                          label="Email"
-                          required
-                          prepend-icon="email"
-                          class="form__input"
+                        <v-text-field v-model="email" :rules="emailRules" label="Email" required prepend-icon="email" class="form__input"
                         ></v-text-field>
                         <v-text-field
-                          class="form-group"
-                          v-model="contactNum" :counter="10" label="Contact Number"
-                          prepend-icon="phone" :rules="phoneRules"
+                          class="form-group" v-model="contactNum" :counter="10" label="Contact Number" prepend-icon="phone" :rules="phoneRules"
                         ></v-text-field>
                         <!--<div id = "checkin_date">-->
                           <v-menu
@@ -113,11 +107,21 @@
                             </template>
                             <!--<v-date-picker v-model="leave_date" @on-change="endTimeChange" @input="menu2 = false"></v-date-picker>-->
                           </v-menu>
+                        <v-text-field
+                          class="form-group"
+                          v-model="days" label="Days"
+                          prepend-icon="event"
+                        >{{days}}</v-text-field>
                         <!--</div>-->
                         <!--<div id = "roomType">-->
-                        <v-select v-model="roomType"
-                                  :items="items" label="Room Type" prepend-icon="hotel"
-                        ></v-select>
+                        <v-text-field
+                          class="form-group"
+                          v-model="roomType" label="Room Type"
+                          prepend-icon="hotel"
+                        >{{roomType}}</v-text-field>
+                        <!--<v-select v-model="roomType"-->
+                                  <!--:items="items" label="Room Type" prepend-icon="hotel"-->
+                        <!--&gt;</v-select>-->
                         <!--</div>-->
                         <!--<div id = "amount">-->
                         <v-select v-model="amount"
@@ -126,9 +130,10 @@
                       </v-card-text>
                       <v-card-text>
                         <p class="typo__p red--text" v-if="submitStatus === 'ERROR'">Please input all the fields correctly.</p>
+                        <p class="typo__p red--text" v-if="availableAmount <= 0">Sorry. All rooms are booked</p>
                         <p class="typo__p red--text" v-if="isReserved === 'NO'">{{message}}</p>
                         <p class="typo__p green--text" v-if="isReserved === 'YES'">{{message}}</p>
-                        <p class="typo__p orange--text" v-if="submitStatus === 'PENDING'"> Please waiting...</p>
+                        <p class="typo__p orange--text" v-if="submitStatus === 'PENDING'"> Please wait.</p>
                       </v-card-text>
                       <v-divider class="mt-5"></v-divider>
                     </v-card>
@@ -150,6 +155,8 @@
 import RoomTypeService from '@/services/roomTypeservice'
 import BookingForm from '@/components/add-order-form'
 import BookingService from '@/services/bookingservices'
+import ConditionService from '@/services/conditionservice'
+// import TypeService from '@/services/typeservice'
 import Vue from 'vue'
 import VueTables from 'vue-tables-2'
 
@@ -165,7 +172,7 @@ export default {
       widgets: false,
       type: [],
       props: ['type'],
-      columns: ['roomType', 'bedType', 'people', 'price', 'reserve'],
+      columns: ['roomType', 'bedType', 'people', 'price', 'Available', 'Reserve'],
       options: {
         filterable: [''],
         headings: {
@@ -189,6 +196,9 @@ export default {
       name: '',
       email: '',
       contactNum: '',
+      availableAmount: '',
+      totalAmount: '', // reserve amount
+      reserveAmount: '', // reserve amount in particular days
       submitStatus: null,
       isReserved: null,
       errorMessages: '',
@@ -216,7 +226,10 @@ export default {
         contactNum: this.contactNum,
         checkin_date: this.checkin_date,
         leave_date: this.leave_date,
+        days: this.days,
         roomType: this.roomType
+        // availableAmount: this.availableAmount,
+        // totalAmount: this.totalAmount
       }
     }
   },
@@ -226,6 +239,9 @@ export default {
     }
   },
   methods: {
+    allowedDates1: {
+
+    },
     startTimeChange: function (e) { // 设置开始时间
       this.checkin_date = e
       this.endTimeOptions = {
@@ -245,6 +261,71 @@ export default {
       }
     },
     reserveRoom: function () {
+      if (this.availableAmount !== 0) {
+        let dateBegin = new Date(this.checkin_date)
+        let dateEnd = new Date(this.leave_date)
+        let dateDiff = dateEnd.getTime() - dateBegin.getTime()
+        let days = Math.floor(dateDiff / (24 * 3600 * 1000))
+        console.log(days)
+        this.days = days
+        this.email = sessionStorage.getItem('email')
+        let email = this.email
+        console.log(email)
+        this.formErrors = false
+        Object.keys(this.form).forEach(f => {
+          if (!this.form[f]) this.formErrors = true
+        })
+        if (this.formErrors === false) {
+          var booking = {
+            name: this.name,
+            email: this.email,
+            checkin_date: this.checkin_date,
+            leave_date: this.leave_date,
+            days: this.days,
+            amount: this.amount,
+            roomType: this.roomType,
+            contactNum: this.contactNum
+          }
+          this.booking = booking
+          console.log('Submitting in BookingForm : ' +
+          JSON.stringify(this.booking, null, 5))
+          this.$emit('booking-is-created-updated', this.booking)
+          BookingService.addBooking(booking)
+            .then(response => {
+              console.log(response)
+              this.$router.push('/customerOrder')
+            })
+            .catch(error => {
+              console.log(error)
+            })
+        }
+      } else {
+        console.log('Sorry. Rooms are all reserved!')
+      }
+    },
+    getAvailableAmount () {
+      let roomType = this.roomType
+      console.log(this.roomType)
+      // sessionStorage.getItem('roomType', this.roomType)
+      let checkindate = this.checkin_date
+      let leavedate = this.leave_date
+      console.log(checkindate)
+      ConditionService.getAmountByType(roomType)
+        .then(response => {
+          this.totalAmount = response.data
+          console.log(response.data)
+        })
+      ConditionService.getReserveAmount(checkindate, leavedate)
+        .then(response => {
+          this.reserveAmount = response.data
+          console.log(response.data)
+          let availableAmount = this.totalAmount - this.reserveAmount
+          this.type.availableAmount = availableAmount
+          console.log(availableAmount)
+          // return availableAmount
+        })
+    },
+    submit () {
       let dateBegin = new Date(this.checkin_date)
       // console.log(dateBegin)
       let dateEnd = new Date(this.leave_date)
@@ -255,55 +336,31 @@ export default {
       // sessionStorage.setItem('days', this.days)
       // sessionStorage.setItem('checkin_date', this.checkin_date)
       // sessionStorage.setItem('leave_date', this.leave_date)
-      // roomType = this.roomType
-      // console.log(roomType)
-      // sessionStorage.getItem('roomType', this.roomType)
-      this.formErrors = false
-      Object.keys(this.form).forEach(f => {
-        if (!this.form[f]) this.formErrors = true
-      })
-      if (this.formErrors === false) {
-        var booking = {
-          name: this.name,
-          email: this.email,
-          checkin_date: this.checkin_date,
-          leave_date: this.leave_date,
-          amount: this.amount,
-          roomType: this.roomType,
-          contactNum: this.contactNum
-        }
-        this.booking = booking
-        console.log('Submitting in BookingForm : ' +
-          JSON.stringify(this.booking, null, 5))
-        this.$emit('booking-is-created-updated', this.booking)
-        BookingService.addBooking(booking)
-          .then(response => {
-            console.log(response)
-            this.$router.push('/customerOrder')
-          })
-          .catch(error => {
-            console.log(error)
-          })
-      }
-    },
-    submit () {
-      // let dateBegin = new Date(this.checkin_date)
-      // // console.log(dateBegin)
-      // let dateEnd = new Date(this.leave_date)
-      // let dateDiff = dateEnd.getTime() - dateBegin.getTime()
-      // let days = Math.floor(dateDiff / (24 * 3600 * 1000))
-      // console.log(days)
-      // this.days = days
-      // sessionStorage.setItem('days', this.days)
-      // sessionStorage.setItem('checkin_date', this.checkin_date)
-      // sessionStorage.setItem('leave_date', this.leave_date)
       let roomType = this.roomType
       console.log(this.roomType)
       // sessionStorage.getItem('roomType', this.roomType)
       if (this.roomType === 'double') {
+        let checkindate = this.checkin_date
+        let leavedate = this.leave_date
+        console.log(checkindate)
+        ConditionService.getAmountByType(roomType)
+          .then(response => {
+            this.totalAmount = response.data
+            console.log(response.data)
+          })
+        ConditionService.getReserveAmount(checkindate, leavedate)
+          .then(response => {
+            this.reserveAmount = response.data
+            console.log(response.data)
+            let availableAmount = this.totalAmount - this.reserveAmount
+            this.availableAmount = availableAmount
+            // console.log(this.type)
+            return availableAmount
+          })
         RoomTypeService.fetchType(roomType)
           .then(response => {
             this.type = response.data
+            // this.type.availableAmount = availableAmount
             console.log(this.type)
           })
       } else if (this.roomType === 'single') {
