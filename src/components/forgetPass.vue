@@ -19,6 +19,12 @@
             placeholder="e.g.xxx@xx.com"
             required>
           </v-text-field>
+          <v-container fluid>
+            <v-radio-group v-model="role" :mandatory="false" row>
+              <v-radio label="Customer"  value="customer"></v-radio>
+              <v-radio label="Administrator" value="admin"></v-radio>
+            </v-radio-group>
+          </v-container>
           <!--<v-text-field ref="email"&ndash;&gt;-->
                          <!--v-model="email"-->
                          <!--:rules="[() => !!email || 'This field is required', emailCheck]"-->
@@ -28,9 +34,11 @@
         <!--</v-text-field>-->
           <v-btn flat outline color="orange" @click="submit">Get email</v-btn>
           <v-card-text>
-            <!--<p class="typo__p red&#45;&#45;text" v-if="submitStatus === 'ERROR'">Please input all the fields correctly.</p>-->
-            <p class="typo__p red--text" v-if="Sent === 'NO'">{{message}}</p>
-            <p class="typo__p green--text" v-if="Sent === 'YES'">{{message}}</p>
+            <p class="typo__p red--text" v-if="submitStatus === 'ERROR'">Please input all the fields correctly.</p>
+            <p class="typo__p red--text" v-if="isSent === 'NO'">{{message}}</p>
+            <p class="typo__p green--text" v-if="isSent === 'YES'">{{message}}</p>
+            <p class="typo__p orange--text" v-if="submitStatus === 'PENDING' && isSent === 'YES'"> Please waiting...</p>
+          <!--</v-card-text>-->
           </v-card-text>
         </v-card>
       </v-flex>
@@ -40,6 +48,7 @@
 
 <script>
 import CustomerService from '@/services/customerservice'
+import AdminService from '@/services/adminservice'
 import Vue from 'vue'
 import Vuelidate from 'vuelidate'
 Vue.use(Vuelidate)
@@ -48,6 +57,11 @@ export default {
   data () {
     return {
       email: null,
+      role: 'customer',
+      isSent: null,
+      submitStatus: null,
+      message: '',
+      errorMessages: '',
       emailRules: [
         v => !!v || 'Email is required',
         v => /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(\.[a-zA-Z0-9_-])+/.test(v) || 'Wrong email format!'
@@ -57,24 +71,44 @@ export default {
   computed: {
     form () {
       return {
-        email: this.email
+        email: this.email,
+        role: this.role
       }
     }
   },
   methods: {
     submit () {
-      let params = {'email': this.email}
-      CustomerService.forgetPass(params).then(response => {
-        if (!params) {
-          this.message = 'Wrong email!'
-          this.Sent = 'NO'
-        } else {
-          this.Sent = 'YES'
-          this.message = 'Your password has been reset. Please check your email!'
-          this.$router.push('/Login')
-        }
-        console.log(response.data)
-      })
+      let user = {'email': this.email}
+      if (this.role === 'customer') {
+        CustomerService.forgetPass(user).then(response => {
+          if (!user) {
+            this.message = 'Wrong email!'
+            // this.isSent = 'NO'
+          } else {
+            this.isSent = 'YES'
+            this.message = 'Your password has been reset. Please check your email!'
+            this.submitStatus = 'PENDING'
+            this.$swal(this.message)
+            this.$router.push('/Login')
+          }
+          console.log(response.data)
+        })
+      } else if (this.role === 'admin') {
+        AdminService.forgetPass(user).then(response => {
+          if (!user) {
+            this.message = 'Wrong email!'
+            console.log(this.message)
+            // this.isSent = 'NO'
+          } else {
+            this.isSent = 'YES'
+            this.message = 'Your password has been reset. Please check your email!'
+            this.submitStatus = 'PENDING'
+            this.$swal(this.message)
+            this.$router.push('/Login')
+          }
+          console.log(response.data)
+        })
+      }
     }
   }
 }

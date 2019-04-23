@@ -1,4 +1,4 @@
-<template>
+<template xmlns:v-slot="http://www.w3.org/1999/XSL/Transform">
   <div id="app">
     <v-app>
     <b-navbar toggleable="md">
@@ -8,38 +8,42 @@
       <b-collapse is-nav id="nav_collapse">
         <b-navbar-nav>
           <div><v-btn to="/" flat large class="fa fa-home" style="padding: 5px">HOME</v-btn></div>
-          <b-nav-item to="/customerHome"><i class="fa fa-money" style="padding: 5px"> Customer</i></b-nav-item>
-          <b-nav-item to="/adminHome"><i class="fa fa-money" style="padding: 5px"> Admin</i></b-nav-item>
+          <div><v-btn to="/searchangpay" flat class="fa fa-home" style="padding: 5px">Room Status</v-btn></div>
+          <!--<b-nav-item to="/customerHome"><i class="fa fa-money" style="padding: 5px"> Customer</i></b-nav-item>-->
+          <!--<b-nav-item to="/adminHome"><i class="fa fa-money" style="padding: 5px"> Admin</i></b-nav-item>-->
         </b-navbar-nav>
         <b-navbar-nav class="ml-auto">
-          <div><v-btn to="/SignUp" flat large class="fa fa-info" style="padding: 5px">SIGN UP</v-btn></div>
-          <div><v-btn to="/Login" flat large class="fa fa-info" style="padding: 5px">LOGIN</v-btn></div>
-          <div><v-btn to="/Logout" flat large class="fa fa-info" style="padding: 5px">LOGOUT</v-btn></div>
+          <div><v-btn to="/SignUp" flat  class="fa fa-info" style="padding: 5px">SIGN UP</v-btn></div>
+          <div><v-btn to="/Login" flat  class="fa fa-info" style="padding: 5px">LOGIN</v-btn></div>
+          <div><v-btn to="/Logout" flat  class="fa fa-info" style="padding: 5px">LOGOUT</v-btn></div>
           <!--<v-menu>-->
-          <v-btn fab small icon > <v-icon color="primary" @click="showAccount">account_circle</v-icon></v-btn>
-            <!--<template v-slot:activator="{ on }">-->
-              <!--<v-btn>A Menu</v-btn>-->
-            <!--</template>-->
-            <!--<v-list>-->
-              <!--<v-list-tile @click="showAccount">-->
-                <!--<v-list-tile-title>Account</v-list-tile-title>-->
+          <v-btn fab small icon > <v-icon @click="showAccount">account_circle</v-icon></v-btn>
+              <!--<v-btn fab small icon>-->
+                <!--<v-icon @click="facebook">more_vert</v-icon>-->
+          <!--<v-menu bottom left>-->
+            <!--<v-list v-if="loadMenu() === 2" dense dark subheader>-->
+              <!--<v-list-tile v-for="(item, i) in items2" :key="i" @click="goSomewhere(item.title)">-->
+                <!--<v-list-tile-title>{{ item.title }}-->
+                  <!--<v-icon small dense subheader>call_made</v-icon>-->
+                <!--</v-list-tile-title>-->
               <!--</v-list-tile>-->
-              <!--<v-list-tile @click="showAccount">-->
-                <!--<v-list-tile-title>Show Account</v-list-tile-title>-->
+            <!--</v-list>-->
+            <!--<v-list v-else-if="loadMenu() === 3"  dense dark subheader>-->
+              <!--<v-list-tile v-for="(item, i) in items3" :key="i" @click="goSomewhere(item.title)">-->
+                <!--<v-list-tile-title>{{ item.title }}-->
+                  <!--<v-icon small dense subheader>call_made</v-icon>-->
+                <!--</v-list-tile-title>-->
+              <!--</v-list-tile>-->
+            <!--</v-list>-->
+            <!--<v-list v-else-if="loadMenu() === 1"  dense dark subheader>-->
+              <!--<v-list-tile v-for="(item, i) in items1" :key="i" @click="goSomewhere(item.title)">-->
+                <!--<v-list-tile-title>{{ item.title }}-->
+                  <!--<v-icon small dense subheader>call_made</v-icon>-->
+                <!--</v-list-tile-title>-->
               <!--</v-list-tile>-->
             <!--</v-list>-->
           <!--</v-menu>-->
-          <!--<div>-->
-          <!--<v-chip color="white" text-color="black" outline>-->
-            <!--<v-avatar @click="showAccount">-->
-              <!--<v-icon>account_circle</v-icon>-->
-            <!--</v-avatar>-->
-            <!--{{this.name}}-->
-          <!--</v-chip>-->
-          <!--</div>-->
-          <!--&lt;!&ndash;<b-nav-item to="/SignUp"><i class="fa fa-info" style="padding: 5px"> SIGN UP </i></b-nav-item>&ndash;&gt;-->
-          <!--<b-nav-item to="/Login"><i class="fa fa-info" style="padding: 5px"> LOGIN </i></b-nav-item>-->
-          <!--<b-nav-item to="/Logout"><i class="fa fa-info" style="padding: 5px"> LOGOUT</i></b-nav-item>-->
+              <!--</v-btn>-->
           <i class="fa fa-pied-piper-alt fa-1x" style="padding: 5px; color: white;"></i>
         </b-navbar-nav>
       </b-collapse>
@@ -62,6 +66,20 @@ export default {
   data () {
     return {
       message: '',
+      items1: [
+        { title: 'Orders' }
+      ],
+      items2: [
+        { title: 'Seller Home' },
+        { title: 'Order List' }
+      ],
+      items3: [
+        { title: 'Admin Home' }
+      ],
+      // notifications: [
+      //   'Account',
+      //   'Edit'
+      // ],
       name: ''
     }
   },
@@ -78,6 +96,9 @@ export default {
       } else if (this.user_role === 'admin') {
         this.$router.push({path: '/AdminInfo'})
       }
+    },
+    facebook () {
+      this.$router.push({path: '/facebook-login'})
     }
   }
 }

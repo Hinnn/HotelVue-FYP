@@ -2,10 +2,10 @@ export default function () {
   if (this.appId && typeof this.appId === 'string' && this.app !== '') {
     window.fbAsyncInit = () => {
       window.FB.init({
-        appId: '942016982662401',
+        appId: this.appId,
         cookie: true,
         xfbml: true,
-        version: 'v2.8'
+        version: 'v3.2'
       })
       window.FB.AppEvents.logPageView()
     }

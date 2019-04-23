@@ -1,6 +1,7 @@
 <template>
   <div id="addBooking">
     <adminLine/>
+    <v-container>
     <v-layout justify-center>
       <v-flex xs12 sm10 md8 lg6>
         <v-card ref="form" id="addBookingCard">
@@ -9,6 +10,7 @@
         </v-card>
       </v-flex>
     </v-layout>
+    </v-container>
   </div>
 </template>
 

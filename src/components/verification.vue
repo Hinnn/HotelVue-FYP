@@ -6,7 +6,7 @@
           <v-card-title class="display-1 pl-5 pt-5">Email Verification</v-card-title>
           <v-card-text>
               <v-text-field ref="email"
-                            :rules="[() => !!email || 'This field is required', emailCheck]"
+                            :rules="emailRules"
                             v-model="email"
                             label="Email"
                             placeholder="e.g.xxx@xx.com" required>
@@ -47,15 +47,21 @@ import Vuelidate from 'vuelidate'
 Vue.use(Vuelidate)
 
 export default {
-  name: 'Email Verification',
+  name: 'verification',
   data: () => ({
     roles: ['Customer', 'Administrator'],
     errorMessages: '',
+    email: '',
     code: null,
+    admin_cede: null,
     role: 'customer',
     formError: false,
     submitStatus: null,
     isVerified: null,
+    emailRules: [
+      v => !!v || 'Email is required',
+      v => /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(\.[a-zA-Z0-9_-])+/.test(v) || 'Email must be valid'
+    ],
     message: ''
   }),
 
@@ -89,8 +95,9 @@ export default {
       })
 
       if (this.formError === false) {
-        let user = {'email': this.email, 'code': this.code}
+        // let user = {'email': this.email, 'code': this.code}
         if (this.role === 'customer') {
+          let user = {'email': this.email, 'code': this.code}
           CustomerService.Verification(user)
             .then(response => {
               if (!user) {
@@ -103,11 +110,13 @@ export default {
                 this.isVerified = 'YES'
                 this.message = 'Congratulations! Your account has been verified!'
                 this.submitStatus = 'PENDING'
+                this.$swal('Email confirmed!', 'Now you can log in! ')
                 this.$router.push('/Login')
               }
               console.log(response.data)
             })
         } else if (this.role === 'admin') {
+          let user = {'email': this.email, 'admin_code': this.code}
           AdminService.Verification(user)
             .then(response => {
               if (!user) {
@@ -120,6 +129,7 @@ export default {
                 this.isVerified = 'YES'
                 this.message = 'Congratulations! Your account has been verified!'
                 this.submitStatus = 'PENDING'
+                this.$swal(this.message)
                 this.$router.push('/Login')
               }
               console.log(response.data)

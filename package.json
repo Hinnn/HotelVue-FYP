@@ -20,6 +20,7 @@
     "firebase": "^5.9.1",
     "hellojs": "^1.17.1",
     "moment": "^2.24.0",
+    "paypal-checkout": "^4.0.267",
     "save": "^2.3.3",
     "swal": "^0.1.0",
     "validator": "^10.11.0",

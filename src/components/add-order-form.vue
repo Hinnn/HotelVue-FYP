@@ -49,8 +49,8 @@
               ></v-select>
             <!--</div>-->
             <!--<div id = "amount">-->
-              <v-select v-model="amount"
-                :items="items1" label="Amount" prepend-icon="plus_one"
+              <v-select v-model="quantity"
+                :items="items1" label="Quantity" prepend-icon="plus_one"
               ></v-select>
             <!--</div>-->
           </v-card-text>
@@ -90,7 +90,7 @@ export default {
   data () {
     return {
       roomType: '',
-      amount: '',
+      quantity: '',
       name: '',
       email: '',
       contactNum: '',
@@ -124,7 +124,7 @@ export default {
         name: this.name,
         email: this.email,
         roomType: this.roomType,
-        amount: this.amount,
+        quantity: this.quantity,
         contactNum: this.contactNum,
         checkin_date: this.checkin_date,
         leave_date: this.leave_date
@@ -190,7 +190,7 @@ export default {
           email: this.email,
           checkin_date: this.checkin_date,
           leave_date: this.leave_date,
-          amount: this.amount,
+          quantity: this.quantity,
           roomType: this.roomType,
           contactNum: this.contactNum
         }

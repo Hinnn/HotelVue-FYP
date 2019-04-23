@@ -17,6 +17,9 @@
           <v-card-title primary-title>
             <div class="headline">Register Date: {{registerDate|moment}} </div>
           </v-card-title>
+          <v-layout justify-center row>
+            <v-btn depressed color="primary" flat @click="changePass">Change password</v-btn>
+          </v-layout>
         </v-card>
       </v-flex>
     </v-layout>
@@ -74,6 +77,9 @@ export default {
             this.registerDate = this.user[0].register_date
           })
       }
+    },
+    changePass () {
+      this.$router.push('/changePassword')
     }
   }
 }

@@ -30,7 +30,7 @@ export default {
       props: ['booking'],
       errors: [],
       childDataLoaded: false,
-      columns: ['_id', 'email', 'name', 'contactNum', 'amount', 'roomType', 'roomID', 'checkin_date', 'leave_date', 'payment_status', 'edit', 'remove'],
+      columns: ['_id', 'email', 'name', 'contactNum', 'quantity', 'roomType', 'roomID', 'checkin_date', 'leave_date', 'payment_status', 'edit', 'remove'],
       options: {
         perPage: 10,
         filterable: ['roomType', 'email', 'checkin_date', 'leave_date', 'name', 'payment_status'],
@@ -39,7 +39,7 @@ export default {
           email: 'Account',
           name: 'Name',
           contactNum: 'Contact Phone',
-          amount: 'Amount',
+          quantity: 'quantity',
           roomType: 'Room Type',
           roomID: 'Room Number',
           checkin_date: 'Check in Date',

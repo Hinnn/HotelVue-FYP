@@ -1,6 +1,7 @@
 <template>
     <div id="EditInfo">
       <customerLine />
+      <v-container>
       <v-layout justify-center>
         <v-flex xs12 sm10 md8 lg6>
           <v-card ref="form" id="EditInfoCard" v-model="valid" lazy-validation>
@@ -34,6 +35,7 @@
           </v-card>
         </v-flex>
       </v-layout>
+      </v-container>
     </div>
 </template>
 <script>

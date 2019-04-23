@@ -1,15 +1,13 @@
 <template>
   <div id="signup">
+    <v-container>
     <v-layout justify-center>
       <v-flex xs12 sm10 md8 lg6>
         <v-card ref="form" id="signupCard">
           <v-card-title class="display-1 pl-5 pt-5">SIGN UP</v-card-title>
           <v-card-text>
             <v-text-field
-              ref="name" v-model="name" :rules="[() => !!name || 'This field is required']"
-              label="Name"
-              placeholder="Required"
-              required>
+              ref="name" v-model="name" :rules="[() => !!name || 'This field is required']" label="Name" placeholder="Required" required>
             </v-text-field>
             <!--<v-text-field ref="email"-->
                           <!--v-model="email"-->
@@ -20,17 +18,13 @@
 
             <!--</v-text-field>-->
             <v-text-field
-              v-model="email"
-              :rules="emailRules"
-              label="Email"
-            placeholder="e.g.xxx@xx.com"
-              required
+              v-model="email" :rules="emailRules" label="Email" placeholder="e.g.xxx@xx.com" required
             ></v-text-field>
             <v-text-field ref="password"
                           v-model="password"
                           :append-icon="show1 ? 'visibility_off' : 'visibility'"
                           :rules="[() => !!password || 'This field is required',() => !!password && password.length >= 8 || 'Password should be more than 8 characters!',
-                                   () => !!password && password.length <= 15 || 'Password should be less than 15 characters!',passwordCheck]"
+                                   () => !!password && password.length <= 15 || 'Password should be less than 15 characters!',passwordRules]"
                           :type="show1 ? 'text' : 'password'"
                           :counter="15"
                           label="Password"
@@ -45,7 +39,7 @@
                           :rules="[() => !!password2 || 'This field is required',
                           () => !!password2 && password2.length >= 8 || 'Password should be more than 8 characters!',
                           () => !!password2 && password2.length <= 15 || 'Password should be less than 15 characters!',
-                           password2Check]"
+                           password2Rules]"
                           :type="show2 ? 'text' : 'password'"
                           :counter="15"
                           label="Confirm Password"
@@ -75,6 +69,7 @@
         </v-card>
       </v-flex>
     </v-layout>
+    </v-container>
   </div>
 </template>
 
@@ -103,9 +98,22 @@ export default {
     submitStatus: null,
     isRegister: null,
     message: '',
+    // emailRules: [
+    //   v => !!v || 'E-mail is required',
+    //   v => /.+@.+/.test(v) || 'E-mail must be valid'
+    // ],
     emailRules: [
-      v => !!v || 'E-mail is required',
-      v => /.+@.+/.test(v) || 'E-mail must be valid'
+      v => !!v || 'Email is required',
+      v => /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(\.[a-zA-Z0-9_-])+/.test(v) || 'Email must be valid'
+    ],
+    passwordRules: [
+      v => !!v || 'Password is required!',
+      v => /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W])[a-zA-Z\d\W?$]{8,16}/.test(v) || 'Password must has number,special character, lowercase and capital Letters!'
+    ],
+    password2Rules: [
+      v => !!v || 'Password is required!',
+      v => /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W])[a-zA-Z\d\W?$]{8,16}/.test(v) || 'Password must has number,special character, lowercase and capital Letters!',
+      v => !!v.password || 'Must be same as Password'
     ]
   }),
   // validations: {
@@ -148,16 +156,16 @@ export default {
       this.errorMessages = checkEmail.test(this.email) ? '' : 'Wrong email format!'
       return this.errorMessages
     },
-    passwordCheck () {
-      let checkPassword = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W])[a-zA-Z\d\W?$]{8,16}/
-      this.errorMessages = checkPassword.test(this.password) ? '' : 'Password must has number,special character, lowercase and capital Letters!'
-      return this.errorMessages
-    },
-    password2Check () {
-      let checkPassword2 = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W])[a-zA-Z\d\W?$]{8,16}/
-      this.errorMessages = checkPassword2.test(this.password2) ? '' : 'At least a number, lowercase letter, capital letter and special character'
-      return this.errorMessages
-    },
+    // passwordCheck () {
+    //   let checkPassword = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W])[a-zA-Z\d\W?$]{8,16}/
+    //   this.errorMessages = checkPassword.test(this.password) ? '' : 'Password must has number,special character, lowercase and capital Letters!'
+    //   return this.errorMessages
+    // },
+    // password2Check () {
+    //   let checkPassword2 = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W])[a-zA-Z\d\W?$]{8,16}/
+    //   this.errorMessages = checkPassword2.test(this.password2) ? '' : 'At least a number, lowercase letter, capital letter and special character'
+    //   return this.errorMessages
+    // },
     clear () {
       this.$v.$reset()
       this.name = ''
@@ -184,6 +192,7 @@ export default {
               this.message = ''
               this.message = response.data.message
               this.submitStatus = 'PENDING'
+              this.$swal('Congratulations!', 'Registered successfully! Just confirm your email by inputting your code! ')
               this.$router.push('/verification')
             }
             console.log(response.data)
@@ -199,6 +208,7 @@ export default {
               this.message = ''
               this.message = response.data.message
               this.submitStatus = 'PENDING'
+              this.$swal('Congratulations!', 'Registered successfully! Just confirm your email by inputting your code! ')
               this.$router.push('/verification')
             }
           })

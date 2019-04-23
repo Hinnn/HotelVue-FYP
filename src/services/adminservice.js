@@ -16,6 +16,8 @@ export default {
     return Api().post('/admin/logout')
   },
   changePass (user, one, token) {
+    // console.log('REQUESTING ' + user.email + ' ' +
+    //   JSON.stringify(user, null, 5))
     return Api().put(`/admin/changePassword/${user}`, one,
       { headers: {'Content-type': 'application/json', 'token': token} })
   },

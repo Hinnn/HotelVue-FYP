@@ -52,54 +52,6 @@
         </v-container>
       </div>
     </v-img>
-            <!--<v-container fluid>-->
-            <!--<v-layout row>-->
-              <!--<v-card style="width:90%; height:100%" class="mx-auto">-->
-                <!--<v-flex row xs12>-->
-                  <!--<v-card style="width:33.3%; height:100%">-->
-          <!--<v-flex xs4 md12>-->
-            <!--<div id = "checkin_date">-->
-              <!--<v-menu-->
-                <!--v-model="menu1" :close-on-content-click="false" :nudge-right="40"-->
-                <!--lazy transition="scale-transition" offset-y>-->
-                <!--<template slot="activator">-->
-                  <!--<v-text-field v-model="checkin_date" label="CheckIn Date" prepend-icon="event" readonly v-on="on">-->
-                  <!--</v-text-field>-->
-                <!--</template>-->
-                <!--<v-date-picker v-model="checkin_date" @on-change="startTimeChange" @input="menu1 = false"></v-date-picker>-->
-              <!--</v-menu>-->
-            <!--</div>-->
-          <!--</v-flex>-->
-                  <!--</v-card>-->
-                  <!--<v-card style="width:33.3%; height:100%">-->
-                    <!--<v-flex xs4 md12>-->
-            <!--<div id = "leave_date">-->
-              <!--<v-menu-->
-                <!--v-model="menu2" :close-on-content-click="false" :nudge-right="40"-->
-                <!--lazy transition="scale-transition" offset-y>-->
-                <!--<template slot="activator">-->
-                  <!--<v-text-field v-model="leave_date" label="CheckOut Date" prepend-icon="event" readonly v-on="on">-->
-                  <!--</v-text-field>-->
-                <!--</template>-->
-                <!--<v-date-picker v-model="leave_date" @on-change="endTimeChange" @input="menu2 = false"></v-date-picker>-->
-              <!--</v-menu>-->
-            <!--</div>-->
-          <!--</v-flex>-->
-                  <!--</v-card>-->
-                  <!--<v-card  style="width:33.4%" class="mx-auto" order-md3 order-xs3>-->
-                    <!--<v-flex xs4>-->
-          <!--<div id ="search">-->
-              <!--<v-card-actions>-->
-                <!--<v-btn icon block color="#BA68C8" dark @click="search">-->
-                <!--<v-icon>search</v-icon>Search</v-btn>-->
-              <!--</v-card-actions>-->
-          <!--</div>-->
-              <!--</v-flex>-->
-                  <!--</v-card>-->
-                <!--</v-flex>-->
-              <!--</v-card>-->
-            <!--</v-layout>-->
-            <!--</v-container>-->
     <div>
       <v-container fluid  grid-list-md pa-2 style="width: 90%">
         <v-card>
@@ -120,7 +72,7 @@
                   <div>
                     <span class="font-weight-bold">Why not register our website and enjoy some privileges? </span>
                   </div>
-                  <v-btn outline color="indigo" dark @click="Signup">SIGNUP</v-btn>
+                  <v-btn outline color="indigo" dark @click="Signup">SIGN UP</v-btn>
                 </v-flex>
                 </v-img>
               </v-card>
@@ -160,8 +112,8 @@ export default {
         // download from http://www.huazhu.com/Hanting
         {src: '/static/images/001.jpg'},
         {src: '/static/images/003.jpg'},
-        {src: '/static/images/004.jpg'},
-        {src: '/static/images/005.jpg'}
+        {src: '/static/images/twin.jpg'},
+        {src: '/static/images/singleroom.jpg'}
       ]
     }
   },
@@ -184,16 +136,22 @@ export default {
         }
       }
     },
-    passwordCheck () {
-      let checkPassword = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W])[a-zA-Z\d\W?$]{8,16}/
-      this.errorMessages = checkPassword.test(this.password) ? '' : 'Password must has number,special character, lowercase and capital Letters!'
-      return this.errorMessages
-    },
+    // passwordCheck () {
+    //   let checkPassword = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W])[a-zA-Z\d\W?$]{8,16}/
+    //   this.errorMessages = checkPassword.test(this.password) ? '' : 'Password must has number,special character, lowercase and capital Letters!'
+    //   return this.errorMessages
+    // },
     Signup () {
       this.$router.push('/SignUp')
     },
     search () {
-      this.$router.push('/Room')
+      if (sessionStorage.getItem('token') === null) {
+        this.$swal('', 'You should login first ', 'info')
+        // this.islogin = false
+        this.$router.push('/Login')
+      } else {
+        this.$router.push('/customerSearch')
+      }
     }
 
   }

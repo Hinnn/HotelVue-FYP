@@ -4,11 +4,13 @@
       <v-layout row justify-center>
         <v-card id="logoutCard" flat style="width: 80%">
           <v-card-title class="headline">Log Out</v-card-title>
+          <h1>{{ msg }}</h1>
           <v-card-text>Are you totally sure to log out?</v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>
             <v-btn color="green darken-1" flat="flat" @click="cancelDialog">Cancel</v-btn>
             <v-btn color="green darken-1" flat="flat" @click="LogOut">Log Out</v-btn>
+            <FacebookLogout app-id="942016982662401" v-bind:logout="logout"></FacebookLogout>
           </v-card-actions>
         </v-card>
       </v-layout>
@@ -19,6 +21,7 @@
 <script>
 import AdminService from '@/services/adminservice'
 import CustomerService from '@/services/customerservice'
+import FacebookLogout from './facebook-logout/facebook-logout'
 import Vue from 'vue'
 import VueCookies from 'vue-cookies'
 
@@ -30,14 +33,21 @@ export default {
   data () {
     return {
       openStatus: this.dialog,
+      msg: '',
       islogin: false
     }
+  },
+  components: {
+    FacebookLogout
   },
   methods: {
     cancelDialog () {
       this.openStatus = false
-      // this.$emit('update-dialog', this.openStatus)
       this.$router.push('/')
+    },
+    logout (response) {
+      this.msg = 'Good Bye'
+      console.log(response)
     },
     LogOut () {
       if (sessionStorage.getItem('token') === null) {

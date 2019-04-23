@@ -5,8 +5,68 @@
         <v-container fluid grid-list-md>
           <v-layout column wrap>
             <v-flex xs12 sm6 md4 lg3>
+              <!--<v-card id="payment" flat v-if="isLoaded">-->
+                <!--<v-card-title class="display-1 pl-5 pt-5">Billing</v-card-title>-->
+                <!--<v-card-text>-->
+                  <!--<v-layout row wrap>-->
+                    <!--<v-flex xs8 sm6>-->
+                      <!--<p class="title left">{{name}}</p>-->
+                    <!--</v-flex>-->
+                    <!--<v-flex xs4 sm3>-->
+                      <!--<p class="title right">€{{price}}</p>-->
+                    <!--</v-flex>-->
+                  <!--</v-layout>-->
+                <!--</v-card-text>-->
+                <!--<v-divider></v-divider>-->
+                <!--<v-card-text>-->
+                  <!--<v-flex xs12>-->
+                    <!--<v-list>-->
+                      <!--<v-list-tile v-for="item in Info" :key="item.text">-->
+                        <!--<v-list-tile-content>-->
+                          <!--<v-list-tile-title v-text="item.text"></v-list-tile-title>-->
+                        <!--</v-list-tile-content>-->
+
+                        <!--<v-list-tile-content>-->
+                          <!--<v-list-tile-title class="text-xs-right" v-text="item.value"></v-list-tile-title>-->
+                        <!--</v-list-tile-content>-->
+                      <!--</v-list-tile>-->
+                    <!--</v-list>-->
+                  <!--</v-flex>-->
+                <!--</v-card-text>-->
+                <!--<v-divider></v-divider>-->
+                <!--<v-card-text>-->
+                  <!--<v-flex xs12>-->
+                    <!--<v-list>-->
+                      <!--<v-list-tile-title class="headline">Total</v-list-tile-title>-->
+                      <!--<v-list-tile-title class="headline text-xs-right">€{{total}}</v-list-tile-title>-->
+                    <!--</v-list>-->
+                  <!--</v-flex>-->
+                <!--</v-card-text>-->
+                <!--<v-card-actions>-->
+                <!--</v-card-actions>-->
+              <!--</v-card>-->
               <v-card>
                 <v-card-title><h2>Reserve a room</h2></v-card-title>
+                <v-layout align-center mb-2>
+                  <v-flex xs12 d-flex>
+                    <v-img src="/static/images/singleroom.jpg" class="mr-3">
+                      <div><h5>Single</h5></div>
+                    </v-img>
+                  </v-flex>
+                  <v-flex xs12 d-flex>
+                    <v-img src="/static/images/003.jpg" class="mr-3">
+                    <div><h5>Double</h5></div>
+                    </v-img>
+                  </v-flex>
+                <!--</v-layout>-->
+                <!--<v-layout align-center mb-2>-->
+                  <v-flex xs12 d-flex>
+                    <v-img src="/static/images/twin.jpg" class="mr-3">
+                      <div><h5>Twin</h5></div>
+                    </v-img>
+                  </v-flex>
+                <!--</v-layout>-->
+                </v-layout>
                 <v-divider></v-divider>
                 <v-layout row>
                   <v-flex xs12 sm4 md3>
@@ -18,7 +78,7 @@
                           <v-text-field v-model="checkin_date" label="CheckIn Date" prepend-icon="event" readonly required>
                           </v-text-field>
                         </template>
-                        <v-date-picker v-model="checkin_date" @on-change="startTimeChange" @input="menu1 = false"></v-date-picker>
+                        <v-date-picker v-model="checkin_date" @on-change="startTimeChange" @input="menu1 = false" :picker-options="startTimeOptions"></v-date-picker>
                       </v-menu>
                     </div>
                   </v-flex>
@@ -43,10 +103,6 @@
                       ></v-select>
                     </div>
                   </v-flex>
-                  <!--<v-flex  xs12 sm6 md3>-->
-                    <!--<v-card-text><h5>{{message}} Day(s)</h5></v-card-text>-->
-                  <!--</v-flex>-->
-                  <!--<v-spacer></v-spacer>-->
                   <v-flex  xs12 sm4 md3>
                     <div id ="search">
                       <v-btn block color="#BA68C8" dark outline @click="submit" style="width: 50%">
@@ -57,7 +113,7 @@
                 <v-layout>
                   <v-flex>
                   <v-client-table :columns="columns" :data="type, availableAmount" :options="options">
-                    <v-btn flat icon color="indigo" slot="Available" slot-scope="props" @click="getAvailableAmount">
+                    <v-btn flat icon color="indigo" slot="Available" slot-scope="props" >
                       {{availableAmount}} Rooms Left
                     </v-btn>
                     <v-btn outline color="indigo" slot="Reserve" slot-scope="props" @click="dialog = true" :disabled="submitStatus === 'PENDING'|| availableAmount <= 0">
@@ -73,7 +129,11 @@
                         <v-toolbar-title>Book Your Room</v-toolbar-title>
                         <v-spacer></v-spacer>
                         <v-toolbar-items>
-                          <v-btn dark flat @click="reserveRoom" :disabled="submitStatus === 'PENDING'|| availableAmount <= 0">Reserve</v-btn>
+                          <v-btn v-if="!toPay" dark flat @click="reserveRoom" :disabled="submitStatus === 'PENDING'|| availableAmount <= 0">Reserve</v-btn>
+                          <v-spacer></v-spacer>
+                          <template v-if="toPay">
+                            <paypal :amount="total"></paypal>
+                          </template>
                         </v-toolbar-items>
                       </v-toolbar>
                       <v-card-text>
@@ -82,36 +142,30 @@
                           required prepend-icon="person" class="form__input">
                         </v-text-field>
                         <v-text-field v-model="email" :rules="emailRules" label="Email" required prepend-icon="email" class="form__input"
-                        ></v-text-field>
+                        >{{email}}</v-text-field>
                         <v-text-field
                           class="form-group" v-model="contactNum" :counter="10" label="Contact Number" prepend-icon="phone" :rules="phoneRules"
                         ></v-text-field>
-                        <!--<div id = "checkin_date">-->
-                          <v-menu
-                            v-model="menu1" :close-on-content-click="false" :nudge-right="40"
-                            lazy transition="scale-transition" offset-y full-width>
-                            <template slot="activator">
-                              <v-text-field v-model="checkin_date" label="Check In Date" prepend-icon="event" readonly required>
-                              </v-text-field>
-                            </template>
-                            <!--<v-date-picker v-model="checkin_date" @on-change="startTimeChange" @input="menu1 = false"></v-date-picker>-->
-                          </v-menu>
-                        <!--</div>-->
-                        <!--<div id = "leave_date">-->
-                          <v-menu
-                            v-model="menu2" :close-on-content-click="false" :nudge-right="40"
-                            lazy transition="scale-transition" offset-y full-width>
-                            <template slot="activator">
-                              <v-text-field v-model="leave_date" label="Check Out Date" prepend-icon="event" readonly required>
-                              </v-text-field>
-                            </template>
-                            <!--<v-date-picker v-model="leave_date" @on-change="endTimeChange" @input="menu2 = false"></v-date-picker>-->
-                          </v-menu>
+                        <v-text-field
+                          class="form-group"
+                          v-model="checkin_date" label="check in date"
+                          prepend-icon="event"
+                        >{{checkin_date}}</v-text-field>
+                        <v-text-field
+                          class="form-group"
+                          v-model="leave_date" label="leave date"
+                          prepend-icon="event"
+                        >{{leave_date}}</v-text-field>
                         <v-text-field
                           class="form-group"
                           v-model="days" label="Days"
                           prepend-icon="event"
                         >{{days}}</v-text-field>
+                        <v-text-field
+                          class="form-group"
+                          v-model="price" label="Price"
+                          prepend-icon="event"
+                        >{{price}}</v-text-field>
                         <!--</div>-->
                         <!--<div id = "roomType">-->
                         <v-text-field
@@ -119,13 +173,8 @@
                           v-model="roomType" label="Room Type"
                           prepend-icon="hotel"
                         >{{roomType}}</v-text-field>
-                        <!--<v-select v-model="roomType"-->
-                                  <!--:items="items" label="Room Type" prepend-icon="hotel"-->
-                        <!--&gt;</v-select>-->
-                        <!--</div>-->
-                        <!--<div id = "amount">-->
-                        <v-select v-model="amount"
-                                  :items="items1" label="Amount" prepend-icon="plus_one"
+                        <v-select v-model="quantity"
+                                  :items="items1" label="quantity" prepend-icon="plus_one"
                         ></v-select>
                       </v-card-text>
                       <v-card-text>
@@ -137,10 +186,6 @@
                       </v-card-text>
                       <v-divider class="mt-5"></v-divider>
                     </v-card>
-                    <!--<v-card ref="form" id="addBookingCard">-->
-                      <!--<v-card-title class="display-1 pl-5 pt-5">Reserve a room</v-card-title>-->
-                      <!--<booking-form :booking="booking" @booking-is-created-updated="submitBooking"></booking-form>-->
-                    <!--</v-card>-->
                   </v-dialog>
                   </v-flex>
                 </v-layout>
@@ -156,6 +201,7 @@ import RoomTypeService from '@/services/roomTypeservice'
 import BookingForm from '@/components/add-order-form'
 import BookingService from '@/services/bookingservices'
 import ConditionService from '@/services/conditionservice'
+import PayPal from '@/components/paypal'
 // import TypeService from '@/services/typeservice'
 import Vue from 'vue'
 import VueTables from 'vue-tables-2'
@@ -192,16 +238,23 @@ export default {
       leave_date: '', // 结束日期
       roomType: '',
       days: '',
-      amount: '',
+      quantity: '',
       name: '',
       email: '',
       contactNum: '',
+      price: '',
+      total: '',
+      subtotal: '',
+      isLoaded: false,
+      // Info: null,
+      // roomImage: this.$route.params.roomImage,
       availableAmount: '',
       totalAmount: '', // reserve amount
       reserveAmount: '', // reserve amount in particular days
       submitStatus: null,
       isReserved: null,
       errorMessages: '',
+      toPay: false,
       message: '',
       items1: ['1', '2', '3'],
       phoneRules: [
@@ -215,14 +268,15 @@ export default {
   },
   components: {
     'booking-form': BookingForm,
-    customerLine: () => import('@/components/customerLine')
+    customerLine: () => import('@/components/customerLine'),
+    'paypal': PayPal
   },
   computed: {
     form () {
       return {
         name: this.name,
         email: this.email,
-        amount: this.amount,
+        quantity: this.quantity,
         contactNum: this.contactNum,
         checkin_date: this.checkin_date,
         leave_date: this.leave_date,
@@ -238,16 +292,16 @@ export default {
       this.errorMessages = ''
     }
   },
+  // created() {
+  //   this.getOrder()
+  // },
   methods: {
-    allowedDates1: {
-
-    },
     startTimeChange: function (e) { // 设置开始时间
       this.checkin_date = e
       this.endTimeOptions = {
         disabledDate (date) {
           let startTime = this.checkin_date ? new Date(this.checkin_date).valueOf() : ''
-          return date && (date.valueOf() < startTime)
+          return date && date.valueOf() < startTime
         }
       }
     },
@@ -268,32 +322,45 @@ export default {
         let days = Math.floor(dateDiff / (24 * 3600 * 1000))
         console.log(days)
         this.days = days
+        // this.total = total
         this.email = sessionStorage.getItem('email')
-        let email = this.email
-        console.log(email)
+        this.price = sessionStorage.getItem('price')
+        // let email = this.email
+        // console.log(email)
         this.formErrors = false
         Object.keys(this.form).forEach(f => {
           if (!this.form[f]) this.formErrors = true
         })
         if (this.formErrors === false) {
+          // this.total = (this.price * parseInt(this.amount, 10)).toString()
           var booking = {
             name: this.name,
             email: this.email,
             checkin_date: this.checkin_date,
             leave_date: this.leave_date,
             days: this.days,
-            amount: this.amount,
+            quantity: this.quantity,
             roomType: this.roomType,
+            price: this.price,
             contactNum: this.contactNum
           }
           this.booking = booking
+          // this.roomInfo = booking
           console.log('Submitting in BookingForm : ' +
           JSON.stringify(this.booking, null, 5))
           this.$emit('booking-is-created-updated', this.booking)
           BookingService.addBooking(booking)
             .then(response => {
               console.log(response)
-              this.$router.push('/customerOrder')
+              sessionStorage.setItem('booking_id', response.data.data._id)
+              console.log(response.data.data)
+              let total = (this.price * parseInt(this.quantity, 10) * parseInt(this.days, 10)).toString()
+              console.log(total)
+              sessionStorage.setItem('total', total)
+              // this.subtotal = parseFloat(this.subtotal).toString()
+              this.isLoaded = true
+              this.toPay = true
+              // this.$router.push('/customerOrder')
             })
             .catch(error => {
               console.log(error)
@@ -302,28 +369,6 @@ export default {
       } else {
         console.log('Sorry. Rooms are all reserved!')
       }
-    },
-    getAvailableAmount () {
-      let roomType = this.roomType
-      console.log(this.roomType)
-      // sessionStorage.getItem('roomType', this.roomType)
-      let checkindate = this.checkin_date
-      let leavedate = this.leave_date
-      console.log(checkindate)
-      ConditionService.getAmountByType(roomType)
-        .then(response => {
-          this.totalAmount = response.data
-          console.log(response.data)
-        })
-      ConditionService.getReserveAmount(checkindate, leavedate)
-        .then(response => {
-          this.reserveAmount = response.data
-          console.log(response.data)
-          let availableAmount = this.totalAmount - this.reserveAmount
-          this.type.availableAmount = availableAmount
-          console.log(availableAmount)
-          // return availableAmount
-        })
     },
     submit () {
       let dateBegin = new Date(this.checkin_date)
@@ -334,11 +379,12 @@ export default {
       console.log(days)
       this.days = days
       // sessionStorage.setItem('days', this.days)
-      // sessionStorage.setItem('checkin_date', this.checkin_date)
-      // sessionStorage.setItem('leave_date', this.leave_date)
+      this.email = sessionStorage.getItem('email')
+      sessionStorage.setItem('checkin_date', this.checkin_date)
+      sessionStorage.setItem('leave_date', this.leave_date)
       let roomType = this.roomType
       console.log(this.roomType)
-      // sessionStorage.getItem('roomType', this.roomType)
+      sessionStorage.setItem('roomType', this.roomType)
       if (this.roomType === 'double') {
         let checkindate = this.checkin_date
         let leavedate = this.leave_date
@@ -360,26 +406,89 @@ export default {
         RoomTypeService.fetchType(roomType)
           .then(response => {
             this.type = response.data
-            // this.type.availableAmount = availableAmount
+            this.price = this.type[0].price
             console.log(this.type)
+            // console.log(response.data)
+            sessionStorage.setItem('price', this.price)
+            // this.type.price = price
+            console.log(this.price)
           })
       } else if (this.roomType === 'single') {
         let roomType = this.roomType
+        let checkindate = this.checkin_date
+        let leavedate = this.leave_date
+        console.log(checkindate)
+        ConditionService.getAmountByType(roomType)
+          .then(response => {
+            this.totalAmount = response.data
+            console.log(response.data)
+          })
+        ConditionService.getReserveAmount(checkindate, leavedate)
+          .then(response => {
+            this.reserveAmount = response.data
+            console.log(response.data)
+            let availableAmount = this.totalAmount - this.reserveAmount
+            this.availableAmount = availableAmount
+            // console.log(this.type)
+            return availableAmount
+          })
         RoomTypeService.fetchType(roomType)
           .then(response => {
             this.type = response.data
+            this.price = this.type[0].price
+            console.log(this.type)
+            // console.log(response.data)
+            sessionStorage.setItem('price', this.price)
+            // this.type.price = price
+            console.log(this.price)
           })
       } else if (this.roomType === 'twin') {
         let roomType = this.roomType
+        let checkindate = this.checkin_date
+        let leavedate = this.leave_date
+        console.log(checkindate)
+        ConditionService.getAmountByType(roomType)
+          .then(response => {
+            this.totalAmount = response.data
+            console.log(response.data)
+          })
+        ConditionService.getReserveAmount(checkindate, leavedate)
+          .then(response => {
+            this.reserveAmount = response.data
+            console.log(response.data)
+            let availableAmount = this.totalAmount - this.reserveAmount
+            this.availableAmount = availableAmount
+            // console.log(this.type)
+            return availableAmount
+          })
         RoomTypeService.fetchType(roomType)
           .then(response => {
             this.type = response.data
-          })
-          .catch(error => {
-            this.errors.push(error)
-            console.log(error)
+            this.price = this.type[0].price
+            console.log(this.type)
+            // console.log(response.data)
+            sessionStorage.setItem('price', this.price)
+            // this.type.price = price
+            console.log(this.price)
           })
       }
+    // },
+    // getOrder: function () {
+    //   this.booking_id = sessionStorage.getItem('booking_id')
+    //   BookingService.fetchBooking(this.booking_id).then(response => {
+    //     if (response.data.data) {
+    //       this.booking = response.data
+    //       let total = (this.price * parseInt(this.amount, 10) * parseInt(this.days, 10)).toString()
+    //       console.log(total)
+    //       this.subtotal = parseFloat(this.subtotal).toString()
+    //       this.Info = [
+    //         {text: 'Quantity', value: this.booking.amount},
+    //         {text: 'Type', value: this.booking[0].roomType},
+    //         {text: 'Subtotal', value: this.subtotal}
+    //       ]
+    //       this.isLoaded = true
+    //     }
+    //   })
     }
   }
 }

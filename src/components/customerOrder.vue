@@ -4,10 +4,13 @@
       <v-container>
           <v-layout row justify-center>
             <v-flex xs12 sm6 md4>
-              <v-text>Order Detail</v-text>
+              <v-text><h3>Order Detail</h3></v-text>
           </v-flex>
         </v-layout>
           <v-client-table :columns="columns" :data="booking" :options="options">
+            <!--<paypal :amount="1" ></paypal>-->
+              <!--pay-->
+            <!--</paypal>-->
             <v-btn flat icon color="indigo" slot="choose room" slot-scope="props" @click="editBooking(props.row._id)">
               <v-icon>edit</v-icon>
             </v-btn>
@@ -21,6 +24,7 @@
 
 <script>
 import BookingService from '@/services/bookingservices'
+// import PayPal from '@/components/paypal'
 import Vue from 'vue'
 import Vuelidate from 'vuelidate'
 import VueTables from 'vue-tables-2'
@@ -31,6 +35,7 @@ export default {
   name: 'customerOrder',
   components: {
     customerLine: () => import('@/components/customerLine')
+    // 'paypal': PayPal
   },
   data () {
     return {
@@ -44,8 +49,9 @@ export default {
       checkin_date: '',
       leave_date: '',
       booking: [],
+      toPay: false,
       columns: ['_id', 'name', 'contactNum',
-        'amount', 'roomType', 'days', 'checkin_date', 'leave_date', 'payment_status', 'choose room', 'cancel'],
+        'amount', 'roomType', 'days', 'checkin_date', 'leave_date', 'roomID', 'payment_status', 'choose room', 'cancel'],
       options: {
         perPage: 5,
         headings: {
@@ -58,6 +64,7 @@ export default {
           days: 'Days',
           checkin_date: 'Check in date',
           leave_date: 'Leave date',
+          roomID: 'Room number',
           payment_status: 'Payment status'
         },
         filterable: ['checkin_date', 'leave_date']
@@ -86,8 +93,16 @@ export default {
           })
       }
     },
+    // pay: function (_id) {
+    //   this.$router.params = _id
+    //   this.toPay = true
+    // },
     editBooking: function (_id) {
       this.$router.params = _id
+      // sessionStorage.setItem('roomID', this.$router.roomID)
+      // sessionStorage.setItem('checkin_date', this.$router.checkin_date)
+      // sessionStorage.setItem('leave_date', this.$router.leave_date)
+      // console.log(roomID)
       this.$router.push('/editOrder')
     },
     deleteBooking: function (_id) {

@@ -1,8 +1,15 @@
 <template>
-  <div class="hero" id="app2">
+  <div class="hero">
     <adminLine />
+    <v-container>
     <h3 class="vue-title"><i class="fa fa-list" style="padding: 3px"></i>Rooms</h3>
       <v-client-table :columns="columns" :data="rooms" :options="options">
+        <!--<el-table-column label="roomIage">-->
+          <!--<template slot-scope="scope">-->
+            <!--&lt;!&ndash;<img :src="scope.imageURL" />&ndash;&gt;-->
+            <!--<img :src="props.row.roomImage.path[0]" v-if="props.row.roomImage !== null">-->
+          <!--</template>-->
+        <!--</el-table-column>-->
         <!--<v-text>Check in Date: {{props.row.checkin_date|moment}} </v-text>-->
         <!--<v-avatar :size="40">-->
           <!--<img :src="props.row.roomImage.path[0]" v-if="props.row.roomImage !== null">-->
@@ -17,6 +24,7 @@
     <v-btn class="ml-0 hidden-sm-and-down" flat @click="addRoom">
       add rooms
     </v-btn>
+    </v-container>
   </div>
 </template>
 <script>
@@ -31,10 +39,11 @@ export default {
   data () {
     return {
       rooms: [],
+      roomImage: '',
       props: ['room'],
       errors: [],
       childDataLoaded: false,
-      columns: ['roomType', 'roomID', 'price', 'people', 'bedType', 'roomImage', 'edit', 'remove'],
+      columns: ['roomType', 'roomID', 'price', 'people', 'bedType', 'edit', 'remove'],
       options: {
         perPage: 10,
         filterable: ['roomType', 'price', 'isEmpty'],
@@ -43,8 +52,7 @@ export default {
           roomID: 'Room Number',
           price: 'Price',
           people: 'Amount of people',
-          bedType: 'beds',
-          roomImage: 'Image'
+          bedType: 'beds'
         }
       },
       imgURL: '',

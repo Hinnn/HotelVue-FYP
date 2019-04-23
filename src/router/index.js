@@ -22,6 +22,10 @@ import manageBooking from '@/components/manageBooking'
 import customerList from '@/components/customerList'
 import book from '@/components/book'
 import RoomList from '@/components/RoomList'
+import roomStatus from '@/components/roomStatus'
+import facebooklogin from '@/facebook-login/facebook-login'
+import paypal from '@/components/paypal'
+import searchandpay from '@/components/searchangpay'
 Vue.use(Router)
 
 export default new Router({
@@ -130,6 +134,26 @@ export default new Router({
       path: '/RoomList',
       name: 'RoomList',
       component: RoomList
+    },
+    {
+      path: '/roomStatus',
+      name: 'roomStatus',
+      component: roomStatus
+    },
+    {
+      path: '/facebooklogin',
+      name: 'facebooklogin',
+      component: facebooklogin
+    },
+    {
+      path: '/paypal',
+      name: 'paypal',
+      component: paypal
+    },
+    {
+      path: '/searchandpay',
+      name: 'searchandpay',
+      component: searchandpay
     }
   ]
 })

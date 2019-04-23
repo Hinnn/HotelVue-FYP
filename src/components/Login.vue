@@ -1,15 +1,17 @@
 <template>
   <div id="login">
+    <v-container>
     <v-layout justify-center>
       <v-flex xs12 sm10 md8 lg6>
         <v-card id="loginCard" flat>
           <v-card-title class="display-1 pl-5 pt-5">LOGIN</v-card-title>
+          <h1>{{ msg }}</h1>
           <v-card-text>
             <form @submit.prevent="submit">
               <v-text-field v-model="email"
                             :error-messages="checkEmail"
                             label="Email" required
-                            @input="$v.email.$touch()" @blur="$v.email.$touch()">
+                            @input="$v.email.$touch()" @blur="$v.email.$touch()" :rules="emailRules">
               </v-text-field>
               <v-text-field v-model="password"
                             :append-icon="show ? 'visibility_off' : 'visibility'"
@@ -35,16 +37,19 @@
               <p class="typo__p green--text" v-if="isLogged === 'YES'">{{message}}</p>
               <p class="typo__p orange--text" v-if="submitStatus === 'PENDING'"> Please waiting ...</p>
             </form>
+            <FacebookLogin app-id="942016982662401" v-bind:login="login" v-bind:error="error"></FacebookLogin>
           </v-card-text>
         </v-card>
       </v-flex>
     </v-layout>
+    </v-container>
   </div>
 </template>
 
 <script>
 import AdminService from '@/services/adminservice'
 import CustomerService from '@/services/customerservice'
+import FacebookLogin from '@/components/facebook-login/facebook-login'
 import Vue from 'vue'
 import Vuelidate from 'vuelidate'
 import { required, minLength, maxLength, email } from 'vuelidate/lib/validators'
@@ -80,13 +85,30 @@ export default {
       email: '',
       password: '',
       show: false,
-      role: '',
+      role: 'customer',
       submitStatus: null,
       isLogged: null,
+      msg: '',
+      emailRules: [
+        v => !!v || 'Email is required',
+        v => /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(\.[a-zA-Z0-9_-])+/.test(v) || 'Email must be valid'
+      ],
       message: ''
     }
   },
+  components: {
+    FacebookLogin
+  },
   methods: {
+    login (response) {
+      this.msg = `Welcome, ${response.name}, to Our Website`
+      console.log(`Successful login for: ${response.name}`)
+      console.log(response)
+    },
+    error (response) {
+      console.log('Failed to login.')
+      console.log(response)
+    },
     submit () {
       this.$v.$touch()
       if (this.$v.$invalid) {
@@ -112,6 +134,7 @@ export default {
               // setTimeout(() => {
               //   this.$router.go(0)
               // }, 1000)
+              this.$swal('Congratulations!', 'Log in successfully! Now you can book your room! ')
               this.$router.push({path: '/AccountInfo'})
               this.$router.go(0)
             }
@@ -136,6 +159,7 @@ export default {
               this.message = ''
               this.message = response.data.message
               this.submitStatus = 'PENDING'
+              this.$swal('Congratulations!', 'Log in successfully! Now you can book your room! ')
               this.$router.push('/AdminInfo')
               this.$router.go(0)
             }

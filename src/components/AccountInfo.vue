@@ -1,7 +1,7 @@
 <template>
     <div id="accountinfo">
       <customerLine />
-      <!--<v-container fluid>-->
+      <v-container>
       <v-layout justify-center>
         <v-flex xs12 sm10 md8 lg6>
               <v-card>
@@ -29,12 +29,13 @@
                 <v-card-actions>
                   <v-layout justify-center row>
                     <v-btn depressed color="primary" flat @click="editUser">Edit Account</v-btn>
+                    <v-btn depressed color="primary" flat @click="changePassword">Change Password</v-btn>
                   </v-layout>
                 </v-card-actions>
               </v-card>
           </v-flex>
         </v-layout>
-      <!--</v-container>-->
+      </v-container>
     </div>
 </template>
 
@@ -150,6 +151,9 @@ export default {
     },
     editUser () {
       this.$router.push('/EditInfo')
+    },
+    changePassword () {
+      this.$router.push('/changePassword')
     }
   }
 }
