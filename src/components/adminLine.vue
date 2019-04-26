@@ -7,9 +7,9 @@
         <b-collapse is-nav id="nav_collapse">
           <b-navbar-nav>
             <div><v-btn to="/AdminInfo" flat large class="fa fa-home" style="padding: 5px">My Account</v-btn></div>
+            <div><v-btn to="/customerList" flat large class="fa fa-info" style="padding: 5px">Customer List</v-btn></div>
           </b-navbar-nav>
           <b-navbar-nav class="ml-auto">
-            <div><v-btn to="/customerList" flat large class="fa fa-info" style="padding: 5px">Customer List</v-btn></div>
             <div><v-btn to="/RoomList" flat large class="fa fa-info" style="padding: 5px">Room List</v-btn></div>
             <div><v-btn to="/manageBooking" flat large class="fa fa-info" style="padding: 5px">Orders</v-btn></div>
           </b-navbar-nav>

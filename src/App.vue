@@ -8,7 +8,7 @@
       <b-collapse is-nav id="nav_collapse">
         <b-navbar-nav>
           <div><v-btn to="/" flat large class="fa fa-home" style="padding: 5px">HOME</v-btn></div>
-          <div><v-btn to="/searchangpay" flat class="fa fa-home" style="padding: 5px">Room Status</v-btn></div>
+          <!--<div><v-btn to="/searchangpay" flat class="fa fa-home" style="padding: 5px">Room Status</v-btn></div>-->
           <!--<b-nav-item to="/customerHome"><i class="fa fa-money" style="padding: 5px"> Customer</i></b-nav-item>-->
           <!--<b-nav-item to="/adminHome"><i class="fa fa-money" style="padding: 5px"> Admin</i></b-nav-item>-->
         </b-navbar-nav>

@@ -76,7 +76,7 @@ export default {
       if (!this.$v.password.$dirty) return errors
       !this.$v.password.minLength && errors.push('Password must be at least 8 characters')
       !this.$v.password.maxLength && errors.push('Password must be less than 15 characters')
-      !this.$v.password.required && errors.push('Name is required.')
+      !this.$v.password.required && errors.push('Password is required.')
       return errors
     }
   },
@@ -91,7 +91,7 @@ export default {
       msg: '',
       emailRules: [
         v => !!v || 'Email is required',
-        v => /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(\.[a-zA-Z0-9_-])+/.test(v) || 'Email must be valid'
+        v => /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(\.[a-zA-Z0-9_-])+/.test(v) || 'Please input valid email'
       ],
       message: ''
     }

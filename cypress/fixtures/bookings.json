@@ -1,0 +1,6 @@
+[
+    { "customerID": 1000202, "paymenttype": "Visa","date": 20181029,"amount": 1,"roomNum": "102" }, 
+    { "customerID": 10000323, "paymenttype": "Master", "date":20181030, "amount": 1, "roomNum": "201" },
+    {"customerID": 10009340, "paymenttype": "Direct", "date": 20181203, "amount": 1,"roomNum": "303"}
+
+]
