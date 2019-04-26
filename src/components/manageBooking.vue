@@ -83,7 +83,7 @@ export default {
     // Fetches Bookings when the component is created
     editBooking: function (_id) {
       this.$router.params = _id
-      this.$router.push('/editOrder')
+      this.$router.push('/adminEditOrder')
     },
     deleteBooking: function (_id) {
       this.$swal({

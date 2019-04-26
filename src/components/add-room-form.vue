@@ -7,8 +7,8 @@
                   :items="items" label="Room Type"
         ></v-select>
         <v-text-field
-          v-model="price" :rules="[() => !!price || 'This field is required']"
-          label="Price"
+          v-model="bedType" :rules="[() => !!bedType || 'This field is required']"
+          label="Bed Type"
           required
           class="form__input"
         ></v-text-field>
@@ -63,6 +63,7 @@ export default {
       roomID: '',
       people: '',
       price: '',
+      bedType: '',
       isEmpty: true,
       formErrors: false,
       submitStatus: null,
@@ -78,7 +79,7 @@ export default {
       return {
         roomType: this.roomType,
         roomID: this.roomID,
-        price: this.price,
+        bedType: this.bedType,
         people: this.people,
         isEmpty: true
       }
@@ -96,11 +97,19 @@ export default {
         if (!this.form[f]) this.formErrors = true
       })
       if (this.formErrors === false) {
+        if (this.roomType === 'double') {
+          this.price = '75'
+        } else if (this.roomType === 'single') {
+          this.price = '50'
+        } else if (this.roomType === 'twin') {
+          this.price = '90'
+        }
         var room = {
           roomType: this.roomType,
           roomID: this.roomID,
           price: this.price,
           people: this.people,
+          bedType: this.bedType,
           isEmpty: true
         }
         this.room = room

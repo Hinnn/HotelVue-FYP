@@ -25,7 +25,7 @@ import RoomList from '@/components/RoomList'
 import roomStatus from '@/components/roomStatus'
 import facebooklogin from '@/facebook-login/facebook-login'
 import paypal from '@/components/paypal'
-import searchandpay from '@/components/searchangpay'
+import adminEditOrder from '@/components/adminEditOrder'
 Vue.use(Router)
 
 export default new Router({
@@ -151,9 +151,9 @@ export default new Router({
       component: paypal
     },
     {
-      path: '/searchandpay',
-      name: 'searchandpay',
-      component: searchandpay
+      path: 'adminEditOrder',
+      name: 'adminEditOrder',
+      component: adminEditOrder
     }
   ]
 })

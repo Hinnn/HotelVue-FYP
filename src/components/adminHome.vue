@@ -1,6 +1,6 @@
 <template>
   <div id="adminhome">
-    <customerLine />
+    <adminLine />
   </div>
 </template>
 
@@ -9,7 +9,7 @@ export default {
   name: 'adminHome',
   components: {
 
-    customerLine: () => import('@/components/adminLine')
+    adminLine: () => import('@/components/adminLine')
   }
 }
 </script>

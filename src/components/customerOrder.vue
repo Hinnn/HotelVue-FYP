@@ -51,7 +51,7 @@ export default {
       booking: [],
       toPay: false,
       columns: ['_id', 'name', 'contactNum',
-        'amount', 'roomType', 'days', 'checkin_date', 'leave_date', 'roomID', 'payment_status', 'choose room', 'cancel'],
+        'quantity', 'roomType', 'days', 'checkin_date', 'leave_date', 'roomID', 'payment_status', 'choose room', 'cancel'],
       options: {
         perPage: 5,
         headings: {
@@ -59,7 +59,7 @@ export default {
           name: 'Name',
           // email: 'email',
           contactNum: 'Phone',
-          amount: 'Amount',
+          quantity: 'Quantity',
           roomType: 'Room Type',
           days: 'Days',
           checkin_date: 'Check in date',

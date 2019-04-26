@@ -36,7 +36,7 @@ export default {
       RoomService.addRoom(user, room, token).then(response => {
         console.log(response)
         this.message = response.data.message
-        this.$router.push({path: '/'})
+        this.$router.push({path: '/RoomList'})
       })
         .catch(error => {
           this.errors.push(error)
