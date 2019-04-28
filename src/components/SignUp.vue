@@ -1,7 +1,7 @@
 <template>
-  <div id="signup">
-    <v-container>
-    <v-layout justify-center>
+  <div class="hero" id="signup">
+    <v-container grid-list-md text-xs-center>
+    <v-layout justify-center wrap>
       <v-flex xs12 sm10 md8 lg6>
         <v-card ref="form" id="signupCard">
           <v-card-title class="display-1 pl-5 pt-5">SIGN UP</v-card-title>
@@ -9,14 +9,6 @@
             <v-text-field
               ref="name" v-model="name" :rules="[() => !!name || 'This field is required']" label="Name" placeholder="Required" required>
             </v-text-field>
-            <!--<v-text-field ref="email"-->
-                          <!--v-model="email"-->
-                          <!--:rules="[() => !!email || 'This field is required', emailCheck]"-->
-                          <!--label="Email"-->
-                          <!--placeholder="e.g.xxx@xx.com"-->
-                          <!--required>-->
-
-            <!--</v-text-field>-->
             <v-text-field
               v-model="email" :rules="emailRules" label="Email" placeholder="e.g.xxx@xx.com" required
             ></v-text-field>
@@ -56,6 +48,7 @@
           <v-card-actions>
             <v-btn outline color="indigo" flat @click="submit">Submit</v-btn>
             <v-btn outline color="indigo" flat @click="clear">Cancel</v-btn>
+            <v-btn outline color="indigo" flat @click="verify">Verify</v-btn>
           </v-card-actions>
           <div class="foot-lnk">
             <a href="#/Login" for="tab-1">Already Member?</a>
@@ -167,11 +160,21 @@ export default {
     //   return this.errorMessages
     // },
     clear () {
-      this.$v.$reset()
-      this.name = ''
-      this.email = ''
-      this.password = ''
-      this.password2 = ''
+      // this.$v.$reset()
+      // this.name = ''
+      // this.email = ''
+      // this.password = ''
+      // this.password2 = ''
+      this.$router.push('/')
+      // this.checkbox = false
+    },
+    verify () {
+      // this.$v.$reset()
+      // this.name = ''
+      // this.email = ''
+      // this.password = ''
+      // this.password2 = ''
+      this.$router.push('/verification')
       // this.checkbox = false
     },
     submit () {

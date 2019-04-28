@@ -1,50 +1,10 @@
 <template>
-  <div id="customersearch">
+  <div class="hero" id="customersearch">
     <customerLine />
       <div>
-        <v-container fluid grid-list-md>
-          <v-layout column wrap>
+        <v-container fluid grid-list-md text-xs-center>
+          <v-layout justify-center column wrap>
             <v-flex xs12 sm6 md4 lg3>
-              <!--<v-card id="payment" flat v-if="isLoaded">-->
-                <!--<v-card-title class="display-1 pl-5 pt-5">Billing</v-card-title>-->
-                <!--<v-card-text>-->
-                  <!--<v-layout row wrap>-->
-                    <!--<v-flex xs8 sm6>-->
-                      <!--<p class="title left">{{name}}</p>-->
-                    <!--</v-flex>-->
-                    <!--<v-flex xs4 sm3>-->
-                      <!--<p class="title right">€{{price}}</p>-->
-                    <!--</v-flex>-->
-                  <!--</v-layout>-->
-                <!--</v-card-text>-->
-                <!--<v-divider></v-divider>-->
-                <!--<v-card-text>-->
-                  <!--<v-flex xs12>-->
-                    <!--<v-list>-->
-                      <!--<v-list-tile v-for="item in Info" :key="item.text">-->
-                        <!--<v-list-tile-content>-->
-                          <!--<v-list-tile-title v-text="item.text"></v-list-tile-title>-->
-                        <!--</v-list-tile-content>-->
-
-                        <!--<v-list-tile-content>-->
-                          <!--<v-list-tile-title class="text-xs-right" v-text="item.value"></v-list-tile-title>-->
-                        <!--</v-list-tile-content>-->
-                      <!--</v-list-tile>-->
-                    <!--</v-list>-->
-                  <!--</v-flex>-->
-                <!--</v-card-text>-->
-                <!--<v-divider></v-divider>-->
-                <!--<v-card-text>-->
-                  <!--<v-flex xs12>-->
-                    <!--<v-list>-->
-                      <!--<v-list-tile-title class="headline">Total</v-list-tile-title>-->
-                      <!--<v-list-tile-title class="headline text-xs-right">€{{total}}</v-list-tile-title>-->
-                    <!--</v-list>-->
-                  <!--</v-flex>-->
-                <!--</v-card-text>-->
-                <!--<v-card-actions>-->
-                <!--</v-card-actions>-->
-              <!--</v-card>-->
               <v-card>
                 <v-card-title><h2>Reserve a room</h2></v-card-title>
                 <v-layout align-center mb-2>
@@ -58,17 +18,15 @@
                     <div><h5>Double</h5></div>
                     </v-img>
                   </v-flex>
-                <!--</v-layout>-->
-                <!--<v-layout align-center mb-2>-->
                   <v-flex xs12 d-flex>
                     <v-img src="/static/images/twin.jpg" class="mr-3">
                       <div><h5>Twin</h5></div>
                     </v-img>
                   </v-flex>
-                <!--</v-layout>-->
                 </v-layout>
                 <v-divider></v-divider>
-                <v-layout row>
+                <!--<v-container fluid grid-list-md text-xs-center>-->
+                <v-layout justify-center row>
                   <v-flex xs12 sm4 md3>
                     <div id = "checkin_date">
                       <v-menu
@@ -82,8 +40,7 @@
                       </v-menu>
                     </div>
                   </v-flex>
-                  <!--<v-spacer></v-spacer>-->
-                  <v-flex  xs12 sm4 md3>
+                  <v-flex xs12 sm4 md3>
                     <div id = "leave_date">
                       <v-menu
                         v-model="menu2" :close-on-content-click="false" :nudge-right="40"
@@ -97,19 +54,20 @@
                     </div>
                   </v-flex>
                   <v-flex xs12 sm4 md3>
-                    <div id = "roomType">
-                      <v-select v-model="roomType"
+                    <div class="hero" id = "roomType">
+                      <v-select v-model="roomType" style="width: 80%" justify-center
                         :items="items" label="Room Type" prepend-icon="hotel"
                       ></v-select>
                     </div>
                   </v-flex>
-                  <v-flex  xs12 sm4 md3>
+                  <v-flex  xs12 sm4 md3 justify-center>
                     <div id ="search">
-                      <v-btn block color="#BA68C8" dark outline @click="submit" style="width: 50%">
+                      <v-btn block color="#BA68C8" dark outline @click="submit" style="width: 80%">
                         <v-icon>search</v-icon>Submit</v-btn>
                     </div>
                   </v-flex>
                 </v-layout>
+                <!--</v-container>-->
                 <v-layout>
                   <v-flex>
                   <v-client-table :columns="columns" :data="type, availableAmount" :options="options">

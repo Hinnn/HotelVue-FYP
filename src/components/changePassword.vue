@@ -1,8 +1,8 @@
 <template>
-  <div id="changepass">
+  <div class="hero" id="changepass">
     <!--<customerLine />-->
-    <v-container>
-    <v-layout justify-center>
+    <v-container grid-list-md text-xs-center>
+    <v-layout justify-center row>
       <v-flex xs12 sm10 md8 lg6>
         <v-card ref="form" id="changepasswordCard">
           <v-card-title class="display-1 pl-5 pt-5">Change Password</v-card-title>
@@ -109,10 +109,11 @@ export default {
     //   return this.errorMessages
     // },
     clear () {
-      this.$v.$reset()
-      // this.email = ''
-      this.password = ''
-      this.password2 = ''
+      this.$router.push('/Accountinfo')
+      // this.$v.$reset()
+      // // this.email = ''
+      // this.password = ''
+      // this.password2 = ''
     },
     submit () {
       this.userEmail = sessionStorage.getItem('email')

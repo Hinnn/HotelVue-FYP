@@ -9,5 +9,8 @@ export default {
   },
   getReserveAmount (checkindate, leavedate) {
     return Api().get(`/conditions/getReserveAmount/${checkindate}/${leavedate}`)
+  },
+  getAvailableRooms (roomType) {
+    return Api().get(`/conditions/getAvailableRooms/${roomType}`)
   }
 }

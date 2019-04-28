@@ -1,25 +1,25 @@
 <template>
-    <div id="customerOrder">
-      <customerLine />
-      <v-container>
-          <v-layout row justify-center>
-            <v-flex xs12 sm6 md4>
-              <v-text><h3>Order Detail</h3></v-text>
-          </v-flex>
-        </v-layout>
-          <v-client-table :columns="columns" :data="booking" :options="options">
-            <!--<paypal :amount="1" ></paypal>-->
-              <!--pay-->
-            <!--</paypal>-->
-            <v-btn flat icon color="indigo" slot="choose room" slot-scope="props" @click="editBooking(props.row._id)">
-              <v-icon>edit</v-icon>
-            </v-btn>
-            <v-btn flat icon color="indigo" slot="cancel" slot-scope="props" @click="deleteBooking(props.row._id)">
-              <v-icon>delete</v-icon>
-            </v-btn>
-          </v-client-table>
-      </v-container>
-    </div>
+  <div class="hero" id="customerOrder">
+    <customerLine />
+    <v-container grid-list-md text-xs-center>
+      <v-layout row justify-center>
+        <v-flex xs12 sm6 md4>
+          <v-text><h3>Order Detail</h3></v-text>
+        </v-flex>
+      </v-layout>
+      <v-client-table :columns="columns" :data="booking" :options="options">
+        <!--<paypal :amount="1" ></paypal>-->
+        <!--pay-->
+        <!--</paypal>-->
+        <v-btn flat icon color="indigo" slot="choose room" slot-scope="props" @click="editBooking(props.row._id)">
+          <v-icon>edit</v-icon>
+        </v-btn>
+        <v-btn flat icon color="indigo" slot="cancel" slot-scope="props" @click="deleteBooking(props.row._id)">
+          <v-icon>delete</v-icon>
+        </v-btn>
+      </v-client-table>
+    </v-container>
+  </div>
 </template>
 
 <script>
@@ -30,7 +30,6 @@ import Vuelidate from 'vuelidate'
 import VueTables from 'vue-tables-2'
 Vue.use(Vuelidate)
 Vue.use(VueTables.ClientTable, {compileTemplates: true, filterByColumn: true})
-
 export default {
   name: 'customerOrder',
   components: {

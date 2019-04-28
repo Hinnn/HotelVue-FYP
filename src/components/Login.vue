@@ -1,7 +1,7 @@
 <template>
-  <div id="login">
-    <v-container>
-    <v-layout justify-center>
+  <div class="hero" id="login">
+    <v-container grid-list-md text-xs-center>
+    <v-layout justify-center row>
       <v-flex xs12 sm10 md8 lg6>
         <v-card id="loginCard" flat>
           <v-card-title class="display-1 pl-5 pt-5">LOGIN</v-card-title>

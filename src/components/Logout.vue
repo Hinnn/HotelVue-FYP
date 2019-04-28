@@ -10,7 +10,7 @@
             <v-spacer></v-spacer>
             <v-btn color="green darken-1" flat="flat" @click="cancelDialog">Cancel</v-btn>
             <v-btn color="green darken-1" flat="flat" @click="LogOut">Log Out</v-btn>
-            <FacebookLogout app-id="942016982662401" v-bind:logout="logout"></FacebookLogout>
+            <!--<FacebookLogout app-id="942016982662401" v-bind:logout="logout"></FacebookLogout>-->
           </v-card-actions>
         </v-card>
       </v-layout>

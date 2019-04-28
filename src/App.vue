@@ -1,4 +1,4 @@
-<template xmlns:v-slot="http://www.w3.org/1999/XSL/Transform">
+<template>
   <div id="app">
     <v-app>
     <b-navbar toggleable="md">
@@ -111,7 +111,7 @@ export default {
     text-align: center;
     color: #2c3e50;
     padding-top: 20px;
-    /*background: url("/static/images/back01.JPG") repeat center top;*/
+    background: url("/static/images/back.jpg") repeat center top;
   }
   .VueTables_sortable{
     cursor: pointer;

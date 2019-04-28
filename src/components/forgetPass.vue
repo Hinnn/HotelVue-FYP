@@ -1,6 +1,6 @@
 <template>
-  <v-container fill-height fluid>
-    <v-layout row fill-height>
+  <v-container grid-list-md text-xs-center>
+    <v-layout justify-center row>
       <v-flex xs12 sm6 offset-sm3>
         <v-card style="width: 100%; height:100%">
           <div>

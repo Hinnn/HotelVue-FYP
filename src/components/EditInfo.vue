@@ -77,10 +77,11 @@ export default {
       this.$refs.menu.save(DateOfBirth)
     },
     clear () {
-      this.$v.$reset()
-      this.DateOfBirth = ''
-      this.phoneNum = ''
-      this.Gender = ''
+      this.$router.push('/Accountinfo')
+      // this.$v.$reset()
+      // this.DateOfBirth = ''
+      // this.phoneNum = ''
+      // this.Gender = ''
     },
     editInfo () {
       this.userEmail = sessionStorage.getItem('email')

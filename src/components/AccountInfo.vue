@@ -1,8 +1,8 @@
 <template>
     <div id="accountinfo">
       <customerLine />
-      <v-container>
-      <v-layout justify-center>
+      <v-container grid-list-md text-xs-center>
+      <v-layout justify-center row>
         <v-flex xs12 sm10 md8 lg6>
               <v-card>
                 <v-card-title primary-title>
