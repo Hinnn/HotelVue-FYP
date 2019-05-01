@@ -22,6 +22,7 @@ export default {
   statusChangeCallback (response) {
     if (response.status === 'connected') {
       this.testAPI(response)
+      this.$router.push('/customerSearch')
     } else if (response.status === 'disconnected' || response.status === 'unknown') {
       this.onlogin()
     } else {
